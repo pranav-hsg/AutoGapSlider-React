@@ -1,0 +1,17 @@
+.sliderCard{
+    // height: 400px !important;;
+    display:block;
+    margin: 0 40px 0 0;
+    border-radius:8px;
+}
+.sliderCard img{
+    border-radius: inherit;
+    user-select: none;
+    width:inherit;
+    object-fit:cover;
+    height:100%
+    
+}
+.sliderCard:first-child{
+    margin-left: 0;
+}
