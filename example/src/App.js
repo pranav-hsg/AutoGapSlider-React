@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ExampleComponent,AutoGapSlider } from 'autogapslider'
+import { AutoGapSlider } from 'autogapslider'
 import 'autogapslider/dist/index.css'
 import {imgArrData} from './sliderCardData'
 const App = () => {
@@ -11,10 +11,7 @@ const App = () => {
     autoMoveSliderInterval:4000,
     sliderToScroll:5,
   }
-  return (<>
-  
-  <AutoGapSlider settings={settings} imgArrData = {imgArrData} />
-  </>)
+  return <AutoGapSlider settings={settings} imgArrData = {imgArrData} />;
 }
 
 export default App
