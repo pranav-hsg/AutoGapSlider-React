@@ -76,7 +76,7 @@ autoMoveSliderInterval | number | 4000 | Milli-seconds after which slider moves 
 
 ## Demo
 
-[Click here](https://pranav-medit.github.io/AutoGapSlider-React/)
+[Click here](https://pranav-medit.github.io/autogapslider-ex/)
 
 
 ## License
