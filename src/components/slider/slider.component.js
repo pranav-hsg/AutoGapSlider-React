@@ -10,7 +10,7 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
   const minGapBetweenSlideCards = settings?.minGapBetweenSlides ?? 0
   const autoMoveSlider = settings?.autoMoveSlider ?? false
   const autoMoveSliderInterval = settings?.autoMoveSliderInterval ?? 2000
-  let slidesToScroll = settings?.sliderToScroll ?? 0
+  let slidesToScroll = settings?.slidesToScroll 
   const sliderCardWidth = settings?.sliderCardWidth ?? '200px'
   const sliderCardHeight = settings?.sliderCardHeight ?? '300px'
   const stopUponHover = settings?.stopUponHover ?? true
