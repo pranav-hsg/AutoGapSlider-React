@@ -7,10 +7,16 @@ import leftImg from './left.svg';
 
 const AutoGapSlider = ({ settings, imgArrData }) => {
   const autoAdjustGap = settings?.autoAdjustGap ?? true;
-  const minGapBetweenSlideCards = settings?.minGapBetweenSlides ?? 10;
+  const minGapBetweenSlideCards = settings?.minGapBetweenSlides ?? 0;
   const autoMoveSlider = settings?.autoMoveSlider ?? false;
   const autoMoveSliderInterval = settings?.autoMoveSliderInterval ?? 2000;
   let slidesToScroll = settings?.sliderToScroll ?? 0;
+  const sliderCardWidth = settings?.sliderCardWidth ?? '200px';
+  const sliderCardHeight = settings?.sliderCardHeight ?? '300px';
+  const stopUponHover = settings?.stopUponHover ?? true;
+  // setInterval(() => {
+  //   console.log(settings)
+  // },1000)
   // Each slider card
   const childSliderCardRef = useRef();
   // Parent of slider cards , div holding all slide cards
@@ -209,7 +215,7 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
     setSliderCardStyle(marginPerSlide);
   }
   useEffect(() => {
-    console.log('Margin updated'+slideCardMargin);
+    console.log('Margin updated'+settings.autoMoveSlider);
     // setTimeout(
     //   () =>{
       if(divCardsContainer.current){
@@ -220,44 +226,56 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
   // },
   //     100
     // );
-  },[slideCardMargin]);
+  },[slideCardMargin,settings]);
   // Useeffect for slider next and prev button
   useEffect(() => {
+    let timerId ;
     // Execute when mounting
     // Initialize required values in particular function
-    let timerId;
+    // let timerId;
     const nextBtn = nextButton.current;
     const prevBtn = prevButton.current;
     const autoGapSliderMainCont = autoGapSliderMainContainer.current;
     const autoSliderMove = () => {
       // console.log("mouseleave")
       if (!autoMoveSlider) return;
+      if (timerId) return
       if (autoMoveSlider) {
         timerId = setInterval(() => {
           throttle(clickHandler, "next");
         }, autoMoveSliderInterval);
       }
+      console.log(timerId)
     };
     const clearAutoSliderMove = (timerId) => {
       // console.log("mouseenter")
       if (timerId) {
         clearTimeout(timerId);
+        // timerId =null;
       }
     };
     calculateMargin();
     initValues();
     // displayContent(initvalues)
+    // clearTimeout(timerId)
     autoSliderMove();
     // sliderStyle.transform('400px')
     // Handle click event for both buttons
     nextBtn.addEventListener("click", () => throttle(clickHandler, "next"));
     prevBtn.addEventListener("click", () => throttle(clickHandler, "prev"));
-    autoGapSliderMainCont.addEventListener("mouseenter", () =>
+    function mouseEnterHandler(){
       clearAutoSliderMove(timerId)
-    );
-    autoGapSliderMainCont.addEventListener("mouseleave", () =>
-      autoSliderMove()
-    );
+      timerId =null;
+      console.log("OK mouseenter")
+    }
+    function mouseLeaveHandler(){
+        autoSliderMove()
+        console.log("mouseleave")
+    }
+    if(stopUponHover){
+      autoGapSliderMainCont.addEventListener("mouseenter",mouseEnterHandler);
+      autoGapSliderMainCont.addEventListener("mouseleave",mouseLeaveHandler);
+    }
     window.addEventListener("resize", () => {
       debounce(() => {
         calculateMargin();
@@ -267,18 +285,16 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
     });
     return () => {
       // Execute when unmounting (cleanup)
+      console.log("Cleanup "+timerId);
+      clearTimeout(timerId)
       nextBtn.removeEventListener("click", () =>
         throttle(clickHandler, "next")
       );
       prevBtn.removeEventListener("click", () =>
         throttle(clickHandler, "prev")
       );
-      autoGapSliderMainCont.removeEventListener("mouseenter", () =>
-        clearAutoSliderMove(timerId)
-      );
-      autoGapSliderMainCont.removeEventListener("mouseleave", () =>
-        autoSliderMove()
-      );
+      autoGapSliderMainCont.removeEventListener("mouseenter", mouseEnterHandler);
+      autoGapSliderMainCont.removeEventListener("mouseleave",mouseLeaveHandler);
       window.removeEventListener("resize", () => {
         debounce(() => {
           calculateMargin();
@@ -287,7 +303,8 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
         });
       });
     };
-  },[slideCardMargin]);
+    
+  },[slideCardMargin,settings]);
   
 
   const dragHandler = (e) => {
@@ -382,7 +399,7 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
           <SliderCard
             ref={childSliderCardRef}
             imgArr={imgArr}
-            styleImg={sliderStyles.slideCardStyle({ slideCardMargin })}
+            styleImg={sliderStyles.slideCardStyle({ slideCardMargin,sliderCardWidth,sliderCardHeight })}
           />
         </div>
         <i
@@ -405,9 +422,9 @@ const sliderStyles = {
   nextButton: ({ nextButtonDisplay }) => ({
     display: nextButtonDisplay ? "inline-block" : "none",
   }),
-  slideCardStyle: ({ slideCardMargin }) => ({
-    width: "200px",
-    height: "300px",
+  slideCardStyle: ({ slideCardMargin,sliderCardWidth,sliderCardHeight }) => ({
+    width: sliderCardWidth,
+    height: sliderCardHeight,
     margin: `0 ${slideCardMargin / 2}px 0 ${slideCardMargin / 2}px`,
   }),
   prevButton: ({ prevButtonDisplay }) => ({
