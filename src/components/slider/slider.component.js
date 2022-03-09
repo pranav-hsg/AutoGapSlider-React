@@ -220,12 +220,10 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
     setSliderCardStyle(marginPerSlide)
   }
   useEffect(() => {
-    console.log('Margin updated' + settings.autoMoveSlider)
     // setTimeout(
     //   () =>{
     if (divCardsContainer.current) {
       divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
-      console.log(divCardsContainer.current.offsetWidth, slideCardMargin * 25)
     }
     // },
     //     100
@@ -241,7 +239,6 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
     const prevBtn = prevButton.current
     const autoGapSliderMainCont = autoGapSliderMainContainer.current
     const autoSliderMove = () => {
-      // console.log("mouseleave")
       if (!autoMoveSlider) return
       if (timerId) return
       if (autoMoveSlider) {
@@ -249,10 +246,8 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
           throttle(clickHandler, 'next')
         }, autoMoveSliderInterval)
       }
-      console.log(timerId)
     }
     const clearAutoSliderMove = (timerId) => {
-      // console.log("mouseenter")
       if (timerId) {
         clearTimeout(timerId)
         // timerId =null;
@@ -270,11 +265,9 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
     function mouseEnterHandler() {
       clearAutoSliderMove(timerId)
       timerId = null
-      console.log('OK mouseenter')
     }
     function mouseLeaveHandler() {
       autoSliderMove()
-      console.log('mouseleave')
     }
     if (stopUponHover) {
       autoGapSliderMainCont.addEventListener('mouseenter', mouseEnterHandler)
@@ -289,7 +282,6 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
     })
     return () => {
       // Execute when unmounting (cleanup)
-      console.log('Cleanup ' + timerId)
       clearTimeout(timerId)
       nextBtn.removeEventListener('click', () => throttle(clickHandler, 'next'))
       prevBtn.removeEventListener('click', () => throttle(clickHandler, 'prev'))
