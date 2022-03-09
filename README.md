@@ -46,8 +46,7 @@ imgArrData must be defined and passed as a prop to Autogapslider. 'imgArrData' c
     },
     {
         'src':' https://picsum.photos/300/400',
-
-        id:2,
+         id:2,
     },
     {
       ...
