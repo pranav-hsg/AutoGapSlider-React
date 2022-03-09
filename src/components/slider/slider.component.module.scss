@@ -66,7 +66,8 @@
  }
  i.button~.button{
      box-shadow: -2px 2px 4px black;
-     background-image:url('assets/icons/right.svg');
+    //  background-image:url('assets/icons/right.svg');
+    background-image:url('assets/icons/right.svg');
      right: 10px; 
      left:initial;
      &:active{
@@ -114,4 +115,4 @@
        font-display: swap;
    }
   
- 
+   

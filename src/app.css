@@ -1,0 +1,6 @@
+.loading{
+  background-image:url('./assets/icons/loading.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position:center;
+}

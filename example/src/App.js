@@ -1,5 +1,4 @@
 import React,{useState,useEffect} from 'react'
-
 import { AutoGapSlider } from 'autogapslider'
 import 'autogapslider/dist/index.css'
 import {imgArrData} from './sliderCardData'
@@ -17,20 +16,20 @@ const App = () => {
   }
   const [agsSettings,setAGSSettings] = useState(settings);
   useEffect(()=>{
-    setTimeout(()=>{
-      console.log("4 timer")
-      setAGSSettings((prevState)=>
-      ({
-        ...agsSettings,
-        autoMoveSlider:true,
-        stopUponHover:false,
-        autoMoveSliderInterval:2000,
-        sliderCardWidth:'90vw',
-        minGapBetweenSlides:0,
-        sliderToScroll:1,
-        autoAdjustGap:false,
-      }))
-    },4000)
+    // setTimeout(()=>{
+    //   console.log("4 timer")
+    //   setAGSSettings((prevState)=>
+    //   ({
+    //     ...agsSettings,
+    //     autoMoveSlider:true,
+    //     stopUponHover:false,
+    //     autoMoveSliderInterval:2000,
+    //     sliderCardWidth:'90vw',
+    //     minGapBetweenSlides:0,
+    //     sliderToScroll:1,
+    //     autoAdjustGap:false,
+    //   }))
+    // },4000)
     // setTimeout(()=>{
     //   console.log("14 timer")
     //   console.log(agsSettings)

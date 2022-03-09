@@ -1,6 +1,6 @@
 {
   "name": "autogapslider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React slider which gives gap automatically between slides according to viewport.",
   "author": "pranav",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "*"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
