@@ -1,9 +1,8 @@
 import { useRef, useEffect, useState } from 'react'
 import * as React from 'react'
 import styles from './slider.component.module.scss'
-import _ from 'lodash'
 import SliderCard from '../slider-card/slider-card.component'
-
+import {throttle,debounce} from '../../utils/throttle-debounce.service'
 const AutoGapSlider = ({ settings, imgArrData }) => {
   const autoAdjustGap = settings?.autoAdjustGap ?? true
   const minGapBetweenSlideCards = settings?.minGapBetweenSlides ?? 0
@@ -13,6 +12,7 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
   const sliderCardWidth = settings?.sliderCardWidth ?? '200px'
   const sliderCardHeight = settings?.sliderCardHeight ?? '300px'
   const stopUponHover = settings?.stopUponHover ?? true
+  const translateDuration = settings?.moveDuration ?? 500
   // setInterval(() => {
   //   console.log(settings)
   // },1000)
@@ -43,13 +43,7 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
   // Detect if we reached end of the slides
   let endOfSlide = false
   // Loadash throttler to throttle resize and if user clicks button many times
-  let throttle = _.throttle((func, ...args) => {
-    func(...args)
-  }, 600)
-  let debounce = _.debounce((func, ...args) => {
-    func(...args)
-    // console.log('deibounc')
-  }, 800)
+  
   const resetSliderPosition = () => {
     // default slidesToScrollWidth:240px
     nextPxValueToScrl = -slidesToScrollWidth
@@ -241,9 +235,8 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
       if (!autoMoveSlider) return
       if (timerId) return
       if (autoMoveSlider) {
-        timerId = setInterval(() => {
-          throttle(clickHandler, 'next')
-        }, autoMoveSliderInterval)
+        let cn = throttle(clickHandler, 'next');
+        timerId = setInterval(cn, autoMoveSliderInterval)
       }
     }
     const clearAutoSliderMove = (timerId) => {
@@ -259,8 +252,10 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
     autoSliderMove()
     // sliderStyle.transform('400px')
     // Handle click event for both buttons
-    nextBtn.addEventListener('click', () => throttle(clickHandler, 'next'))
-    prevBtn.addEventListener('click', () => throttle(clickHandler, 'prev'))
+    let cn = throttle(clickHandler, 'next');
+    let cp = throttle(clickHandler, 'prev');
+    nextBtn.addEventListener('click', cn)
+    prevBtn.addEventListener('click', cp)
     function mouseEnterHandler() {
       clearAutoSliderMove(timerId)
       timerId = null
@@ -272,13 +267,12 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
       autoGapSliderMainCont.addEventListener('mouseenter', mouseEnterHandler)
       autoGapSliderMainCont.addEventListener('mouseleave', mouseLeaveHandler)
     }
-    window.addEventListener('resize', () => {
-      debounce(() => {
-        calculateMargin()
-        initValues()
-        resetSliderPosition()
-      })
+    const resizeHandler = debounce(() => {
+      calculateMargin()
+      initValues()
+      resetSliderPosition()
     })
+    window.addEventListener('resize', resizeHandler)
     return () => {
       // Execute when unmounting (cleanup)
       clearTimeout(timerId)
@@ -286,13 +280,12 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
       prevBtn.removeEventListener('click', () => throttle(clickHandler, 'prev'))
       autoGapSliderMainCont.removeEventListener('mouseenter', mouseEnterHandler)
       autoGapSliderMainCont.removeEventListener('mouseleave', mouseLeaveHandler)
-      window.removeEventListener('resize', () => {
-        debounce(() => {
-          calculateMargin()
-          initValues()
-          resetSliderPosition()
-        })
+      const resizeHandler = debounce(() => {
+        calculateMargin()
+        initValues()
+        resetSliderPosition()
       })
+      window.removeEventListener('resize', resizeHandler)
     }
   }, [slideCardMargin, settings])
 
@@ -381,7 +374,7 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
         </i>
 
         <div
-          style={sliderStyles.divCardsContainer({ translateValue })}
+          style={sliderStyles.divCardsContainer({ translateValue,translateDuration })}
           ref={divCardsContainer}
           className={styles.divCardsContainer + ' imgComp '}
         >
@@ -409,8 +402,9 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
 }
 // Styles for slider
 const sliderStyles = {
-  divCardsContainer: ({ translateValue }) => ({
-    transform: `translateX(${translateValue + 'px'})` || '0'
+  divCardsContainer: ({ translateValue,translateDuration }) => ({
+    transform: `translateX(${translateValue + 'px'})` || '0',
+    transition: `transform ease-in-out ${translateDuration/1000}s`
   }),
   nextButton: ({ nextButtonDisplay }) => ({
     display: nextButtonDisplay ? 'inline-block' : 'none'

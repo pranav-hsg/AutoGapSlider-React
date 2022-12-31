@@ -13,11 +13,9 @@
     "autogapslider": "file:..",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "react-scripts": "^4.0.0"
+    "react-scripts": "file:../node_modules/react-scripts"
   },
-  "devDependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
-  },
+  "devDependencies": {},
   "eslintConfig": {
     "extends": "react-app"
   },
