@@ -3,7 +3,6 @@ import * as React from 'react'
 import styles from './slider.component.module.scss'
 import _ from 'lodash'
 import SliderCard from '../slider-card/slider-card.component'
-import leftImg from './left.svg'
 
 const AutoGapSlider = ({ settings, imgArrData }) => {
   const autoAdjustGap = settings?.autoAdjustGap ?? true
