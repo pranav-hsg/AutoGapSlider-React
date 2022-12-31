@@ -1,6 +1,6 @@
 {
   "name": "autogapslider",
-  "version": "1.0.9",
+  "version": "2.0.0",
   "description": "React slider which gives gap automatically between slides according to viewport.",
   "author": "pranav",
   "license": "MIT",
