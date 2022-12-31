@@ -24,7 +24,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl --minify --no-sourcemap --format modern  --jsxFragment React.Fragment --copy-files assets:dist/as",
+    "build": "microbundle-crl --minify --no-sourcemap --format modern,cjs  --jsxFragment React.Fragment --copy-files assets:dist/as",
     "start": "microbundle-crl watch --no-compress --format modern,cjs --jsxFragment React.Fragment",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",

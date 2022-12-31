@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import { AutoGapSlider } from 'autogapslider'
-import 'autogapslider/dist/index.modern.css'
+import 'autogapslider/dist/index.css'
 import {imgArrData} from './sliderCardData'
 const App = () => {
   
