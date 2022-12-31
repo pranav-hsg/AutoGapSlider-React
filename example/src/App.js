@@ -7,9 +7,9 @@ const App = () => {
   const settings = {
     autoAdjustGap:true,
     minGapBetweenSlides:20,
-    autoMoveSlider:true,
+    autoMoveSlider:false,
     autoMoveSliderInterval:1000,
-    slidesToScroll:5,
+    slidesToScroll:1,
     sliderCardWidth:'200px',
     sliderCardHeight:'300px',
     stopUponHover:true,
