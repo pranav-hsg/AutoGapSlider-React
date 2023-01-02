@@ -3,7 +3,7 @@ import * as React from 'react'
 import styles from './slider.component.module.scss'
 import SliderCard from '../slider-card/slider-card.component'
 import {throttle,debounce} from '../../utils/throttle-debounce.service'
-const AutoGapSlider = ({ settings, imgArrData }) => {
+const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   const autoAdjustGap = settings?.autoAdjustGap ?? true
   const minGapBetweenSlideCards = settings?.minGapBetweenSlides ?? 0
   const autoMoveSlider = settings?.autoMoveSlider ?? false
@@ -353,6 +353,7 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
   }, [])
   const [prevButtonDisplay, showPrevButton] = useState(true)
   const [nextButtonDisplay, showNextButton] = useState(true)
+  
   // const leftStyle = {display:prevButtonDisplay?"inline-block":"none"}
   // const rightStyle = {display:nextButtonDisplay?"inline-btranslateX(translateValue)lock":"none"}
   // const sliderStyle = {transform: `translateX(${translateValue+'px'})` || '0'}
@@ -381,6 +382,7 @@ const AutoGapSlider = ({ settings, imgArrData }) => {
           <SliderCard
             ref={childSliderCardRef}
             imgArr={imgArr}
+            onCardClick={(e,o)=>{ if(onCardClick) onCardClick?.(e,o)}}
             styleImg={sliderStyles.slideCardStyle({
               slideCardMargin,
               sliderCardWidth,

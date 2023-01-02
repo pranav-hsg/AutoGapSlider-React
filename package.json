@@ -1,6 +1,6 @@
 {
   "name": "autogapslider",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "React slider which gives gap automatically between slides according to viewport.",
   "author": "pranav",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "microbundle-crl --minify --no-sourcemap --format modern,cjs  --jsxFragment React.Fragment --copy-files assets:dist/as",
+    "build": "microbundle-crl --minify --no-sourcemap --format modern,cjs  --jsxFragment React.Fragment ",
     "start": "microbundle-crl watch --no-compress --format modern,cjs --jsxFragment React.Fragment",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",

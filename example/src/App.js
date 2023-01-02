@@ -42,8 +42,10 @@ const App = () => {
     //     }))
     // },7000)
   },[])
-  
-  return <AutoGapSlider settings={agsSettings} imgArrData = {imgArrData} />;
+  function onCardClick($event,obj) {
+    console.log('Button clicked',$event,obj);
+  }
+  return <AutoGapSlider onCardClick={onCardClick} settings={agsSettings} imgArrData = {imgArrData} />;
 }
 
 export default App

@@ -29,7 +29,10 @@ const App = () => {
     sliderCardHeight:'300px',
     stopUponHover:true,
   }
-  return <AutoGapSlider settings={settings} imgArrData = {imgArrData} />;
+  function onCardClick($event,obj) {
+    console.log('Click event',$event,obj);
+  }
+  return <AutoGapSlider onCardClick={onCardClick} settings={settings} imgArrData = {imgArrData} />;
 }
 
 export default App
