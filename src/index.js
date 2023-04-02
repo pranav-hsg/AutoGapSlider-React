@@ -1,2 +1,2 @@
-import './app.scss';
+import './app.scss'; 
 export * from './components'
