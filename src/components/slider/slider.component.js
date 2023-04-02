@@ -3,6 +3,7 @@ import * as React from 'react'
 import styles from './slider.component.module.scss'
 import SliderCard from '../slider-card/slider-card.component'
 import {throttle,debounce} from '../../utils/throttle-debounce.service'
+export const SettingsContext = React.createContext();
 const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   const autoAdjustGap = settings?.autoAdjustGap ?? true
   const minGapBetweenSlideCards = settings?.minGapBetweenSlides ?? 0
@@ -13,6 +14,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   const sliderCardHeight = settings?.sliderCardHeight ?? '300px'
   const stopUponHover = settings?.stopUponHover ?? true
   const translateDuration = settings?.moveDuration ?? 500
+
   // setInterval(() => {
   //   console.log(settings)
   // },1000)
@@ -212,18 +214,19 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       minGapBetweenSlides
     setSliderCardStyle(marginPerSlide)
   }
-  useEffect(() => {
-    // setTimeout(
-    //   () =>{
-    if (divCardsContainer.current) {
-      divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
-    }
-    // },
-    //     100
-    // );
-  }, [slideCardMargin, settings])
+  // useEffect(() => {
+  //   // setTimeout(
+  //   //   () =>{
+    
+  //   // },
+  //   //     100
+  //   // );
+  // }, [slideCardMargin, settings])
   // Useeffect for slider next and prev button
   useEffect(() => {
+    // if (divCardsContainer.current) {
+    //   divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
+    // }
     let timerId
     // Execute when mounting
     // Initialize required values in particular function
@@ -359,6 +362,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   // const sliderStyle = {transform: `translateX(${translateValue+'px'})` || '0'}
   return (
     <>
+    
       <div
         id='visibleDiv'
         ref={autoGapSliderMainContainer}
@@ -379,16 +383,14 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
           ref={divCardsContainer}
           className={styles.divCardsContainer + ' imgComp '}
         >
-          <SliderCard
-            ref={childSliderCardRef}
-            imgArr={imgArr}
-            onCardClick={(e,o)=>{ if(onCardClick) onCardClick?.(e,o)}}
-            styleImg={sliderStyles.slideCardStyle({
+          <SettingsContext.Provider value={{imgArr,onCardClick,styles:{
               slideCardMargin,
               sliderCardWidth,
               sliderCardHeight
-            })}
-          />
+            },ref:childSliderCardRef }} >
+
+          <SliderCard />
+          </SettingsContext.Provider>
         </div>
         <i
           ref={nextButton}
@@ -410,11 +412,6 @@ const sliderStyles = {
   }),
   nextButton: ({ nextButtonDisplay }) => ({
     display: nextButtonDisplay ? 'inline-block' : 'none'
-  }),
-  slideCardStyle: ({ slideCardMargin, sliderCardWidth, sliderCardHeight }) => ({
-    width: sliderCardWidth,
-    height: sliderCardHeight,
-    margin: `0 ${slideCardMargin / 2}px 0 ${slideCardMargin / 2}px`
   }),
   prevButton: ({ prevButtonDisplay }) => ({
     display: prevButtonDisplay ? 'inline-block' : 'none'

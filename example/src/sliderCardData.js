@@ -1,18 +1,22 @@
 export const imgArrData = [
     {
         'src':'https://picsum.photos/300/300',
+        caption:'Nothing to say as of now',
         id:1,
     },
     {
         'src':' https://picsum.photos/300/400',
+        caption:'Caption 2',
         id:2,
     },
     {
         'src':'https://picsum.photos/400/300',
+        caption:'Caption 3',
         id:3,
     },
     {
         'src':'https://picsum.photos/500/100',
+        caption:'Caption 4',
         id:4,
     },
     {
@@ -20,6 +24,7 @@ export const imgArrData = [
         id:5,
     },{
         'src':'https://picsum.photos/500/400',
+        caption:'Caption 4 cool minded meditation is always a best thing as it reduces stress',
         id:6,
     },
     {

@@ -1,117 +1,89 @@
-// :global body{
-//     margin:0;
-// }
-.divCardsContainer{
-   
+:global body {
     margin: 0;
-    display:flex;
- //    overflow: hidden;
- //    gap: 10px;
-    
- }
- .autoGapSliderMainContainer{
-     // justify-content: center;
-     position:relative;
-     overflow:hidden;
-     margin: 0;
-     display:flex;
-     align-items: center;
- }
- .button{
-     width:20px;
-     height:20px;
-     z-index: 1;
-     display: inline-block;
-     position: absolute;
-     left:10px;
-     background-color: white;
-     color: rgba(255, 255, 255, 0);
-     border-radius: 2px;
-     box-shadow: 2px 2px 4px black;
-     padding:4px;
-     cursor: pointer;
-     user-select: none;
-     background-image:url('assets/icons/left.svg');
-     background-repeat: no-repeat;
-     background-position:center;
-     transition: transform .6s;
-     &:hover{
-         background-color: rgb(236, 236, 236);
-     }
-     &:active {
-         box-shadow:none;
-         transform: translateX(-16px);
-         // animation: goLeft 1s;
-         // &::before{
-         //     transform: translate3d(16px,-5000vw,0 );
-         // }
-         
-     }
-     &::before { 
-         content: " ";
-         position:absolute;
-         left:-2px;
-         top: -2px;
-         background-color: transparent;
-         // border: 2px solid red;
-         display: inline-block;
-         color: red;
-         transform: translate3d(-14px,-5000vw,0 );
-         width:200%;
-         height:10000vw;
-         font-weight: bold;
-         
-     }
- }
- i.button~.button{
-     box-shadow: -2px 2px 4px black;
-    //  background-image:url('assets/icons/right.svg');
-    background-image:url('assets/icons/right.svg');
-     right: 10px; 
-     left:initial;
-     &:active{
-         transform: translateX(16px);
-     }
-     
-     // &:active {
-     //     box-shadow:none;
-     //     transform: translateX(+44px);
-     // }
- }
- .sliderCard{
-     // height: 400px !important;;
-     display:block;
-     margin: 0 40px 0 0;
-     border-radius:8px;
- }
- .sliderCard img{
-     border-radius: inherit;
-     user-select: none;
-     width:inherit;
-     object-fit:cover;
-     height:100%
-     
- }
- .sliderCard:first-child{
-     margin-left: 0;
- }
- .sliderCard:last-child{
-     // margin-right: 80px!important;
- }
- @keyframes goLeft{
-     0%{
-       transform: translateX(0);
-     }
-     50%{
-         transform: translateX(-40px)
-     }
-     100%{
-       transform: translateX(0);
-     }
-   }
-   #idea{
-       color:red;
-       font-display: swap;
-   }
+  }
   
-   
+  .divCardsContainer {
+    margin: 0;
+    display: flex;
+  }
+  
+  .autoGapSliderMainContainer {
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .button {
+    width: 20px;
+    height: 20px;
+    z-index: 1;
+    display: inline-block;
+    position: absolute;
+    left: 10px;
+    background-color: white;
+    color: rgba(255, 255, 255, 0);
+    border-radius: 2px;
+    box-shadow: 2px 2px 4px black;
+    padding: 4px;
+    cursor: pointer;
+    user-select: none;
+    background-image: url('assets/icons/left.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform .6s;
+  }
+  
+  .button:hover {
+    background-color: rgb(236, 236, 236);
+  }
+  
+  .button:active {
+    box-shadow: none;
+    transform: translateX(-16px);
+  }
+  
+  .button::before {
+    content: " ";
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    background-color: transparent;
+    display: inline-block;
+    color: red;
+    transform: translate3d(-14px, -5000vw, 0);
+    width: 200%;
+    height: 10000vw;
+    font-weight: bold;
+  }
+  
+  i.button~.button {
+    box-shadow: -2px 2px 4px black;
+    background-image: url('assets/icons/right.svg');
+    right: 10px;
+    left: initial;
+  }
+  
+  i.button~.button:active {
+    transform: translateX(16px);
+  }
+  
+  .sliderCard {
+    display: block;
+    margin: 0 40px 0 0;
+    border-radius: 8px;
+  }
+  
+  .sliderCard img {
+    border-radius: inherit;
+    user-select: none;
+    width: inherit;
+    object-fit: cover;
+    height: 100%;
+  }
+  
+  .sliderCard:first-child {
+    margin-left: 0;
+  }
+  

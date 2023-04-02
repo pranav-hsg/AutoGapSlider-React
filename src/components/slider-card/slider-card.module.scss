@@ -3,6 +3,7 @@
     display:block;
     margin: 0 40px 0 0;
     border-radius:8px;
+    position: relative;
 }
 .sliderCard img{
     border-radius: inherit;
@@ -14,4 +15,20 @@
 }
 .sliderCard:first-child{
     margin-left: 0;
+}
+.helo{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    border-radius:0 0 8px 8px;
+    // border: 2px solid blue;
+    height: 20%;
+    display: grid;
+    place-content: center;
+    font-size: 1.2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+    background-color: rgb(21, 21, 21);
 }

@@ -10,6 +10,7 @@ const App = () => {
     autoMoveSlider:false,
     autoMoveSliderInterval:1000,
     sliderCardWidth:'200px',
+    // slidesToScroll:1,
     sliderCardHeight:'300px',
     stopUponHover:true,
   }
@@ -25,7 +26,7 @@ const App = () => {
     //     autoMoveSliderInterval:2000,
     //     sliderCardWidth:'90vw',
     //     minGapBetweenSlides:0,
-    //     sliderToScroll:1,
+    //     slidesToScroll:1,
     //     autoAdjustGap:false,
     //   }))
     // },4000)
