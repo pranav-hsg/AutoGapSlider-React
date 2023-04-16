@@ -81,6 +81,8 @@ const imgArrData = [
 ### Also supports captions.
 ![image](https://user-images.githubusercontent.com/65011770/232329200-b5cfb578-4b8d-43ce-bf48-ec9549c0423f.png)
 
+### If default loading is enabled
+![image](https://user-images.githubusercontent.com/65011770/232331593-d8745579-94ff-428f-874a-9428f6cbc111.png)
 
 ## Auto adjust gap demo 
 ![Animation](https://user-images.githubusercontent.com/65011770/143224959-a97af1db-299b-413c-94b2-d84405dfa480.gif)
