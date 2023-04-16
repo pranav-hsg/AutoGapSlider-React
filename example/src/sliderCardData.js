@@ -2,38 +2,41 @@ import image1 from './assets/static/per1.jpg'
 export const imgArrData = [
     {
         'src':'https://picsum.photos/300/300',
-        caption:'Nothing to say as of now',
+        caption:'Breathtaking Beauty',
         id:1,
     },
     {
-        'src':'assets/static/per1.jpg',
-        caption:'Caption 2',
+        'src':'https://picsum.photos/300/400',
+        caption:'Natural Wonder',
         id:2,
     },
     {
-        'src':image1,
-        caption:'Caption 3',
+        'src':'https://picsum.photos/300/500',
+        caption:'Serene Scenery',
         id:3,
     },
     {
         'src':'https://picsum.photos/700/300',
-        caption:'Caption 4',
+        caption:'Majestic Mountains',
         id:4,
     },
     {
         'src':'https://picsum.photos/500/200',
+        caption:'Tranquil Treasures',
         id:5,
     },{
         'src':'https://picsum.photos/500/400',
-        caption:'Caption 4 cool minded meditation is always a best thing as it reduces stress',
+        caption:'Heavenly Horizons',
         id:6,
     },
     {
         'src':'https://picsum.photos/500/500',
+        caption: 'Stunning Landscapes',
         id:7,
     },
     {
         'src':'https://picsum.photos/100/500',
+        caption: 'Wilderness Wonders',
         id:8,
     },
     {

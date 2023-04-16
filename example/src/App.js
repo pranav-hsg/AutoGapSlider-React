@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import { AutoGapSlider } from 'autogapslider'
 import 'autogapslider/dist/index.css' 
 import {imgArrData} from './sliderCardData'
-import image1 from './assets/icons/loading.svg'
+import image1 from './assets/icons/right.svg'
 const App = () => {
   
   const settings = {
@@ -12,9 +12,16 @@ const App = () => {
     autoMoveSliderInterval:1000,
     sliderCardWidth:'200px',
     // slidesToScroll:1,
-    // loadImageUrl:image1,
+    loadImageUrl:image1,
+    defaultImageLoader:false,
     sliderCardHeight:'300px',
-    stopUponHover:true,
+    stopUponHover:true
+    // styles:{sliderCardCaption:{
+      
+    //     backgroundColor: 'red',
+    //     fontSize: '200px'
+      
+    // }}
   }
   const [agsSettings,setAGSSettings] = useState(settings);
   useEffect(()=>{

@@ -33,6 +33,7 @@ const SliderCard = forwardRef(({ styleImg }, childSliderCardRef) => {
       // image.style.backgroundImage = null;
     }
     else {
+      if(!context.settings.defaultImageLoader && !context.settings.loadImageUrl) return;
       if(context.settings.loadImageUrl) {image.style.backgroundImage = `url(${settings.loadImageUrl})`;}
       image.classList.add('loading')
       
@@ -61,7 +62,7 @@ const SliderCard = forwardRef(({ styleImg }, childSliderCardRef) => {
               alt=''
             />
 
-            {src.caption && <div className={styles.caption}>{src.caption}</div>}
+            {src.caption && <div style={settings?.styles?.sliderCardCaption} className={styles.caption}>{src.caption}</div>}
           </div>
         )
       })}
