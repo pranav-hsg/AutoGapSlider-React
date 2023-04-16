@@ -1,8 +1,19 @@
 # Autogapslider
 
-**React slider which gives gap automatically between slides according to the viewport.**
+**A zero-dependency, mobile-responsive React slider which gives gap automatically between slides according to the viewport.**
+
 
 [![NPM](https://img.shields.io/npm/v/autogapslider.svg)](https://www.npmjs.com/package/autogapslider) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
+
+## Description
+
+AutoGapSlider is a React component that displays a horizontal slider with a fixed width for each card. The component calculates how many cards can fit in a given viewport width and automatically gives gaps between the cards by giving margins. This ensures that no partial cards are displayed in the viewport and that the cards are evenly spaced out.
+
+
+## Purpose
+
+AutoGapSlider is designed to make it easy for React developers to create a horizontal slider that automatically adjusts the spacing between cards to fit the viewport. This is especially useful when displaying a large number of cards, as it ensures that all the cards are properly fitted to the viewport with no partial displays, eliminating the need to adjust card width.
 
 ## Install
 
@@ -39,25 +50,30 @@ export default App
 ```
 ## Card data
 
-imgArrData must be defined and passed as a prop to Autogapslider. 'imgArrData' contains the path of card image to render,
+The imgArrData array must be defined and passed as a prop to the Autogapslider component. This array contains the path of card image to render, along with an optional caption property for each image. Here's an example of how to create the imgArrData array:
+
  Example: create file sliderCardData.js 
  ```
- const imgArrData = [
-    {
-        'src':'https://picsum.photos/300/300',
-        id:1,
-    },
-    {
-        'src':' https://picsum.photos/300/400',
-         id:2,
-    },
-    {
-      ...
-    },
-    ...
- ]
+const imgArrData = [
+   {
+       'src':'https://picsum.photos/300/300',
+       'id':1,
+       'caption': 'Beautiful landscape'
+   },
+   {
+       'src':'https://picsum.photos/300/400',
+       'id':2,
+       'caption': 'Cute animal'
+   },
+   {
+       'src':'https://picsum.photos/300/500',
+       'id':3,
+       // No caption provided for this image
+   },
+   // Add more image objects here
+];
 ```
-> Note: Please provide more than 14 images or increase the card width using the ‘sliderCardWidth’ prop so that slider can be scrolled horizontally.
+> Note: Please note that the Autogapslider component is designed to display a horizontal slider with a fixed width for each card. If the number of cards in your imgArrData array is low or insufficient, the slider may not display correctly and the cards may behave erratically. To avoid this, please make sure you have enough cards in the imgArrData array to fill the width of the slider, or increase the card width using the sliderCardWidth prop. This will ensure that the slider displays correctly and the cards are displayed side by side.
 
 ## Slider View
 ![image](https://user-images.githubusercontent.com/65011770/125191551-a8b36900-e260-11eb-96c3-84be84f7dba9.png)
