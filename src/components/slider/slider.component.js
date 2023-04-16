@@ -41,7 +41,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   let slidesToScrollWidth = 0
   let nextPxValueToScrl = 0
   let prevPxValueToScrl = 0
-  console.log(nextPxValueToScrl)
   let divCardsContainerTotalWidth = 0
   // Detect if we reached end of the slides
   let endOfSlide = false
@@ -225,7 +224,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   // }, [slideCardMargin, settings])
   // Useeffect for slider next and prev button
   useEffect(() => {
-    console.log(nextPxValueToScrl)
     // if (divCardsContainer.current) {
     //   divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
     // }
@@ -277,7 +275,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       initValues()
       resetSliderPosition()
     })
-    console.log(nextPxValueToScrl)
     window.addEventListener('resize', resizeHandler)
     return () => {
       // Execute when unmounting (cleanup)
@@ -334,7 +331,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     autoGapSliderMainCont.addEventListener(
       'touchmove',
       (e) => {
-        console.log(e)
+        // console.log(e)
       },
       { passive: true }
     )
