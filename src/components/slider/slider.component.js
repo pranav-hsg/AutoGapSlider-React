@@ -41,6 +41,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   let slidesToScrollWidth = 0
   let nextPxValueToScrl = 0
   let prevPxValueToScrl = 0
+  console.log(nextPxValueToScrl)
   let divCardsContainerTotalWidth = 0
   // Detect if we reached end of the slides
   let endOfSlide = false
@@ -224,6 +225,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   // }, [slideCardMargin, settings])
   // Useeffect for slider next and prev button
   useEffect(() => {
+    console.log(nextPxValueToScrl)
     // if (divCardsContainer.current) {
     //   divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
     // }
@@ -275,6 +277,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       initValues()
       resetSliderPosition()
     })
+    console.log(nextPxValueToScrl)
     window.addEventListener('resize', resizeHandler)
     return () => {
       // Execute when unmounting (cleanup)
@@ -313,11 +316,11 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       if (touchEndPos - touchStartPos > 0) clickHandler('prev')
       else clickHandler('next')
     }
-    images.forEach((image) => {
-      onImageLoad(image, false)
-      image.addEventListener('dragstart', (e) => dragHandler(e))
-      image.addEventListener('load', (e) => onImageLoad(image, true))
-    })
+    // images.forEach((image) => {
+    //   onImageLoad(image, false)
+    //   image.addEventListener('dragstart', (e) => dragHandler(e))
+    //   image.addEventListener('load', (e) => onImageLoad(image, true))
+    // })
     autoGapSliderMainCont.addEventListener(
       'touchstart',
       (e) => touchStartHandler(e),
@@ -348,7 +351,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       )
       images.forEach((image) => {
         image.removeEventListener('dragstart', (e) => dragHandler(e))
-        image.removeEventListener('load', (e) => onImageLoad(e))
+        // image.removeEventListener('load', (e) => onImageLoad(e))
       })
       // autoGapSliderMainContainer.current.removeEventListener('touchmove',(e)=>touchStartHandler(e))
       // throttle(touchStartHandler,2000,e)
@@ -387,7 +390,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
               slideCardMargin,
               sliderCardWidth,
               sliderCardHeight
-            },ref:childSliderCardRef }} >
+            },ref:childSliderCardRef,settings }} >
 
           <SliderCard />
           </SettingsContext.Provider>

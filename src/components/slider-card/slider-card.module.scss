@@ -4,6 +4,7 @@
     margin: 0 40px 0 0;
     border-radius:8px;
     position: relative;
+    cursor: pointer;
 }
 .sliderCard img{
     border-radius: inherit;
@@ -16,8 +17,9 @@
 .sliderCard:first-child{
     margin-left: 0;
 }
-.helo{
+.caption{
     position: absolute;
+    cursor: pointer;
     bottom: 0;
     width: 100%;
     color: white;
@@ -32,3 +34,15 @@
     white-space:nowrap;
     background-color: rgb(21, 21, 21);
 }
+
+:global {
+    div.div.div__sliderCard img.loading{
+    background-image:url('assets/icons/loading.svg');
+    background-color: gray;
+    background-repeat: no-repeat;
+    background-size: cover;
+    // border: 2px solid black;
+    background-position:center;
+  
+   }
+  }

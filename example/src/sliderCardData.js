@@ -1,3 +1,4 @@
+import image1 from './assets/static/per1.jpg'
 export const imgArrData = [
     {
         'src':'https://picsum.photos/300/300',
@@ -5,17 +6,17 @@ export const imgArrData = [
         id:1,
     },
     {
-        'src':' https://picsum.photos/300/400',
+        'src':'assets/static/per1.jpg',
         caption:'Caption 2',
         id:2,
     },
     {
-        'src':'https://picsum.photos/400/300',
+        'src':image1,
         caption:'Caption 3',
         id:3,
     },
     {
-        'src':'https://picsum.photos/500/100',
+        'src':'https://picsum.photos/700/300',
         caption:'Caption 4',
         id:4,
     },

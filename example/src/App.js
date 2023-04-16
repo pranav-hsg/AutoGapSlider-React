@@ -1,7 +1,8 @@
 import React,{useState,useEffect} from 'react'
 import { AutoGapSlider } from 'autogapslider'
-import 'autogapslider/dist/index.css'
+import 'autogapslider/dist/index.css' 
 import {imgArrData} from './sliderCardData'
+import image1 from './assets/icons/loading.svg'
 const App = () => {
   
   const settings = {
@@ -11,6 +12,7 @@ const App = () => {
     autoMoveSliderInterval:1000,
     sliderCardWidth:'200px',
     // slidesToScroll:1,
+    // loadImageUrl:image1,
     sliderCardHeight:'300px',
     stopUponHover:true,
   }
