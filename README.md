@@ -62,6 +62,10 @@ imgArrData must be defined and passed as a prop to Autogapslider. 'imgArrData' c
 ## Slider View
 ![image](https://user-images.githubusercontent.com/65011770/125191551-a8b36900-e260-11eb-96c3-84be84f7dba9.png)
 
+### Also supports captions.
+![image](https://user-images.githubusercontent.com/65011770/232329200-b5cfb578-4b8d-43ce-bf48-ec9549c0423f.png)
+
+
 ## Auto adjust gap demo 
 ![Animation](https://user-images.githubusercontent.com/65011770/143224959-a97af1db-299b-413c-94b2-d84405dfa480.gif)
 
