@@ -114,10 +114,32 @@ slidesToScroll | number | entire-viewport | The number of slides to scroll when 
 sliderCardWidth | string | '200px' |  The width of each slider card.
 sliderCardHeight | string | '300px' | The height of each slider card.
 stopUponHover | boolean | true | A boolean value indicating whether to stop automatic slider movement when the user hovers over the slider. By default, this is set to true.
-defaultImageLoader | boolean |true | This option enables the default loading image. When set to true, a loading spinner will be displayed while the actual image is being loaded.
+defaultImageLoader | boolean |false | This option enables the default loading image. When set to true, a loading spinner will be displayed while the actual image is being loaded.
 loadImageUrl | imported-image | undefined | This option allows you to specify the image to be displayed while the actual image is loading. This is useful when you want to show a custom loader or a placeholder image while the actual image is being loaded. This will override the settings of defaultImageLoader.
+styles | StyleObject | undefined |  The styles option is used to set custom styles for various elements of the slider and can be defined as below
+
+### StyleObject
+  The StyleObject option in the settings object is used to provide custom styles for certain slider elements. It is an object where the keys are the names of the elements and the values are CSS style objects. 
+
+  Type | Key | description |Example value
+  ---  | --- | --- | --- 
+  Caption  | sliderCardCaption | caption is an optional text that can be added to the slider card | { backgroundColor: 'green'}
 
 
+## Customizing Slider Styles
+
+You can provide custom styles for certain slider elements by passing them as an object to the styles property in the settings object. For example, to set a green background and large font size for the slider card captions, you can do:
+```
+const settings = {
+  // Other settings...
+  styles: {
+    sliderCardCaption: {
+      backgroundColor: 'green',
+      fontSize: '2rem'
+    }
+  }
+}
+```
 ## Demo
 
 [Click here](https://pranav-medit.github.io/autogapslider-ex/)
