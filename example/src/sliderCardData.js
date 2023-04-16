@@ -107,3 +107,21 @@ export const imgArrData = [
         id:25,
     },
 ];
+export const settings= {
+    // autoAdjustGap:true,
+    minGapBetweenSlides:20,
+    autoMoveSlider:true,
+    // autoMoveSliderInterval:1000,
+    // sliderCardWidth:'200px',
+    // slidesToScroll:1,
+    // loadImageUrl:image1,
+    // defaultImageLoader:true,
+    // sliderCardHeight:'300px',
+    // stopUponHover:true
+    // styles:{sliderCardCaption:{
+      
+    //     backgroundColor: 'red',
+    //     fontSize: '200px'
+      
+    // }}
+  }

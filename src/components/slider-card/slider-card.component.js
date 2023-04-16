@@ -33,8 +33,8 @@ const SliderCard = forwardRef(({ styleImg }, childSliderCardRef) => {
       // image.style.backgroundImage = null;
     }
     else {
-      if(!context.settings.defaultImageLoader && !context.settings.loadImageUrl) return;
-      if(context.settings.loadImageUrl) {image.style.backgroundImage = `url(${settings.loadImageUrl})`;}
+      if(!context?.settings?.defaultImageLoader && !context?.settings?.loadImageUrl) return;
+      if(context?.settings?.loadImageUrl) {image.style.backgroundImage = `url(${settings?.loadImageUrl})`;}
       image.classList.add('loading')
       
     }

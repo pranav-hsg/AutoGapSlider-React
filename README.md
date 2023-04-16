@@ -25,34 +25,44 @@ npm install --save autogapslider
 
 ```jsx
 import React from 'react'
+import { AutoGapSlider } from 'autogapslider' //importing AutoGapSlider component from autogapslider library
+import 'autogapslider/dist/index.css' //importing CSS for AutoGapSlider component
+import {imgArrData,settings as agsSettings} from './sliderCardData' //importing image data and settings object from sliderCardData.js file
 
-import { AutoGapSlider } from 'autogapslider'
-import 'autogapslider/dist/index.css'
-import {imgArrData} from './sliderCardData'
 const App = () => {
-  const settings = {
-    autoAdjustGap:true,
-    minGapBetweenSlides:20,
-    autoMoveSlider:true,
-    autoMoveSliderInterval:1000,
-    slidesToScroll:5,
-    sliderCardWidth:'200px',
-    sliderCardHeight:'300px',
-    stopUponHover:true,
+  //function to handle the click event on a card
+  function onCardClick($event,obj) { 
+    //log the click event and card object to the console
+    console.log('Button clicked',$event,obj); 
   }
-  function onCardClick($event,obj) {
-    console.log('Click event',$event,obj);
-  }
-  return <AutoGapSlider onCardClick={onCardClick} settings={settings} imgArrData = {imgArrData} />;
+  
+  return (
+    //Render the AutoGapSlider component with necessary props
+    <AutoGapSlider 
+      onCardClick={onCardClick} //passing the onCardClick function as a prop
+      settings={agsSettings} //passing the settings object as a prop
+      imgArrData={imgArrData} //passing the image data array as a prop
+    />
+  );
 }
 
 export default App
+
 ```
-## Card data
+## Settings and Card data
+
+Settings is an optional object that can be passed as a prop to the AutoGapSlider component. It contains various options that can be used to customize the behavior of the slider. 
+
+Here's an example of what a simple slider settings looks like.
+```jsx
+export const settings= {
+    minGapBetweenSlides:20
+}
+```
+Example: you can ddd this to a file sliderCardData.js 
 
 The imgArrData array must be defined and passed as a prop to the Autogapslider component. This array contains the path of card image to render, along with an optional caption property for each image. Here's an example of how to create the imgArrData array:
-
- Example: create file sliderCardData.js 
+In the same file sliderCardData.js add this:
  ```
 const imgArrData = [
    {
@@ -78,13 +88,16 @@ const imgArrData = [
 ## Slider View
 ![image](https://user-images.githubusercontent.com/65011770/125191551-a8b36900-e260-11eb-96c3-84be84f7dba9.png)
 
-### Also supports captions.
+### Slider View with Captions
 ![image](https://user-images.githubusercontent.com/65011770/232329200-b5cfb578-4b8d-43ce-bf48-ec9549c0423f.png)
+> Note : This image shows the AutoGapSlider component with captions enabled, which can be done by passing an extra parameter as explained in the section above.
 
-### If default loading is enabled
+### Slider View with Default Loading Enabled
 ![image](https://user-images.githubusercontent.com/65011770/232331593-d8745579-94ff-428f-874a-9428f6cbc111.png)
+> Note : To enable loading images, you can set defaultImageLoader to true in the settings. You can also override the default loading image by passing a different image URL to the loadImageUrl property of the settings object.
 
-## Auto adjust gap demo 
+## Auto-Adjusted Gap Slider
+ Demo of the AutoGapSlider demonstrating how it automatically adjusts the spacing between cards to fit the viewport.
 ![Animation](https://user-images.githubusercontent.com/65011770/143224959-a97af1db-299b-413c-94b2-d84405dfa480.gif)
 
 ## Configuration
@@ -93,14 +106,17 @@ const imgArrData = [
 You can provide optional settings to change default behavior of slider.
 Name | Type | Default Value | Description
 ---  | --- | --- | --- 
-autoAdjustGap | boolean | true | Feature which centers cards by distributing margin between slider cards.
-minGapBetweenSlides | number | 0 | Minimum gap between each slider cards.
-autoMoveSlider | boolean | false | Moves slider automatically with time.
-autoMoveSliderInterval | number | 2000 | Milli-seconds after which slider moves next.
-slidesToScroll | number | entire-viewport | Number of slides to scroll when clicked on next/prev button.
-sliderCardWidth | string | '200px' | Each slider card width.
-sliderCardHeight | string | '300px' | Each slider card height.
-stopUponHover | boolean | true | When autoMoveSlider is true and if user hovers on slider , auto move stops.
+autoAdjustGap | boolean | true | A boolean value indicating whether the slider should automatically adjust the space between cards to fit the viewport.
+minGapBetweenSlides | number | 0 | The minimum amount of gap between each slider card.
+autoMoveSlider | boolean | false | A boolean value indicating whether the slider should move automatically with a set interval.
+autoMoveSliderInterval | number | 2000 | The interval in milliseconds between each automatic slide movement.
+slidesToScroll | number | entire-viewport | The number of slides to scroll when clicked on the next/prev button. By default, it scrolls the entire viewport width.
+sliderCardWidth | string | '200px' |  The width of each slider card.
+sliderCardHeight | string | '300px' | The height of each slider card.
+stopUponHover | boolean | true | A boolean value indicating whether to stop automatic slider movement when the user hovers over the slider. By default, this is set to true.
+defaultImageLoader | boolean |true | This option enables the default loading image. When set to true, a loading spinner will be displayed while the actual image is being loaded.
+loadImageUrl | imported-image | undefined | This option allows you to specify the image to be displayed while the actual image is loading. This is useful when you want to show a custom loader or a placeholder image while the actual image is being loaded. This will override the settings of defaultImageLoader.
+
 
 ## Demo
 

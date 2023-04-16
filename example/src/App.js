@@ -1,30 +1,31 @@
-import React,{useState,useEffect} from 'react'
-import { AutoGapSlider } from 'autogapslider'
-import 'autogapslider/dist/index.css' 
-import {imgArrData} from './sliderCardData'
-import image1 from './assets/icons/right.svg'
+import React from 'react'
+import { AutoGapSlider } from 'autogapslider' //importing AutoGapSlider component from autogapslider library
+import 'autogapslider/dist/index.css' //importing CSS for AutoGapSlider component
+import {imgArrData,settings as agsSettings} from './sliderCardData' //importing image data and settings object from sliderCardData.js file
+
 const App = () => {
-  
-  const settings = {
-    autoAdjustGap:true,
-    minGapBetweenSlides:20,
-    autoMoveSlider:false,
-    autoMoveSliderInterval:1000,
-    sliderCardWidth:'200px',
-    // slidesToScroll:1,
-    loadImageUrl:image1,
-    defaultImageLoader:false,
-    sliderCardHeight:'300px',
-    stopUponHover:true
-    // styles:{sliderCardCaption:{
-      
-    //     backgroundColor: 'red',
-    //     fontSize: '200px'
-      
-    // }}
+  function onCardClick($event,obj) { //function to handle the click event on a card
+    console.log('Button clicked',$event,obj); //log the click event and card object to the console
   }
-  const [agsSettings,setAGSSettings] = useState(settings);
-  useEffect(()=>{
+  
+  return (
+    //Render the AutoGapSlider component with necessary props
+    <AutoGapSlider 
+      onCardClick={onCardClick} //passing the onCardClick function as a prop
+      settings={agsSettings} //passing the settings object as a prop
+      imgArrData={imgArrData} //passing the image data array as a prop
+    />
+  );
+}
+
+export default App //exporting the App component
+
+
+
+
+
+  // const [agsSettings,setAGSSettings] = useState(settings);
+  // useEffect(()=>{
     // setTimeout(()=>{
     //   console.log("4 timer")
     //   setAGSSettings((prevState)=>
@@ -51,11 +52,4 @@ const App = () => {
     //       sliderToScroll:1,
     //     }))
     // },7000)
-  },[])
-  function onCardClick($event,obj) {
-    console.log('Button clicked',$event,obj);
-  }
-  return <AutoGapSlider onCardClick={onCardClick} settings={agsSettings} imgArrData = {imgArrData} />;
-}
-
-export default App
+  // },[])
