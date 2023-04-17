@@ -63,8 +63,8 @@ Example: you can ddd this to a file sliderCardData.js
 
 The imgArrData array must be defined and passed as a prop to the Autogapslider component. This array contains the path of card image to render, along with an optional caption property for each image. Here's an example of how to create the imgArrData array:
 In the same file sliderCardData.js add this:
- ```
-const imgArrData = [
+ ```jsx
+export const imgArrData = [
    {
        'src':'https://picsum.photos/300/300',
        'id':1,
@@ -129,7 +129,7 @@ styles | StyleObject | undefined |  The styles option is used to set custom styl
 ## Customizing Slider Styles
 
 You can provide custom styles for certain slider elements by passing them as an object to the styles property in the settings object. For example, to set a green background and large font size for the slider card captions, you can do:
-```
+```jsx
 const settings = {
   // Other settings...
   styles: {
