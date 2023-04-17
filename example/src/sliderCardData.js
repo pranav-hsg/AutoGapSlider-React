@@ -110,7 +110,7 @@ export const imgArrData = [
 export const settings= {
     // autoAdjustGap:true,
     minGapBetweenSlides:20,
-    autoMoveSlider:true,
+    // autoMoveSlider:true,
     // autoMoveSliderInterval:1000,
     // sliderCardWidth:'200px',
     // slidesToScroll:1,

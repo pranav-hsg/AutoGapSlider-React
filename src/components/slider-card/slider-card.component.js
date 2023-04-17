@@ -12,6 +12,9 @@ const SliderCard = forwardRef(({ styleImg }, childSliderCardRef) => {
     sliderCardHeight: context.styles.sliderCardHeight
   })
   let originalBackgroundImage;
+  const dragHandler = (e) => {
+    e.preventDefault()
+  }
   useEffect(() => {
     let images = Array.from(document.getElementsByClassName('imageHolder'))
     images.forEach((image) => {
