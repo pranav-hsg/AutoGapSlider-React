@@ -35,9 +35,9 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   const [slideCardMargin, updateSlideCardMargin] = useState(20)
   const [translateValue, updateTranslateValue] = useState(0)
   // Initialize default values
-  let sliderVisibleWidth = 0
+  const sliderVisibleWidth = useRef(0);
   // let slidesToScroll = 0;
-  let slidesToScrollWidth = 0
+  const slidesToScrollWidth = useRef(0);
   const nextPxValueToScrl = useRef(0);
   const prevPxValueToScrl = useRef(0);
   const cardsContainerTotalWidth = useRef(0);
@@ -46,9 +46,9 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   // Loadash throttler to throttle resize and if user clicks button many times
   
   const resetSliderPosition = () => {
-    // default slidesToScrollWidth:240px
-    nextPxValueToScrl.current = -slidesToScrollWidth
-    prevPxValueToScrl.current = slidesToScrollWidth
+    // default slidesToScrollWidth.current:240px
+    nextPxValueToScrl.current = -slidesToScrollWidth.current
+    prevPxValueToScrl.current = slidesToScrollWidth.current
     updateTranslateValue(0)
     displayArrow('prev', false)
   }
@@ -66,19 +66,19 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     // translateX(-240px) -> moves slide in -> direction by 240px(each slide width by default)
     if (updateref === 'next') {
       // minus position goes -> direction on translate
-      // ex: prevPxValueToScrl.current=240,nextPxValueToScrl.current=-240  and slidesToScrollWidth=240
-      prevPxValueToScrl.current = prevPxValueToScrl.current - slidesToScrollWidth
+      // ex: prevPxValueToScrl.current=240,nextPxValueToScrl.current=-240  and slidesToScrollWidth.current=240
+      prevPxValueToScrl.current = prevPxValueToScrl.current - slidesToScrollWidth.current
       // first-time:prevPxValueToScrl.current:0
       // second-time:prevPxValueToScrl.current:-240
-      nextPxValueToScrl.current = nextPxValueToScrl.current - slidesToScrollWidth
+      nextPxValueToScrl.current = nextPxValueToScrl.current - slidesToScrollWidth.current
       // first-time:nextPxValueToScrl.current:-480
       // second-time:nextPxValueToScrl.current:-720
     } else {
-      // ex: prevPxValueToScrl.current=-240,nextPxValueToScrl.current=-720  and slidesToScrollWidth=240
-      nextPxValueToScrl.current = nextPxValueToScrl.current + slidesToScrollWidth
+      // ex: prevPxValueToScrl.current=-240,nextPxValueToScrl.current=-720  and slidesToScrollWidth.current=240
+      nextPxValueToScrl.current = nextPxValueToScrl.current + slidesToScrollWidth.current
       // first-time:prevPxValueToScrl.current:480
       // second-time:prevPxValueToScrl.current:620
-      prevPxValueToScrl.current = prevPxValueToScrl.current + slidesToScrollWidth
+      prevPxValueToScrl.current = prevPxValueToScrl.current + slidesToScrollWidth.current
       // first-time:nextPxValueToScrl.current:0
       // second-time:nextPxValueToScrl.current:240
     }
@@ -103,9 +103,12 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   //     // clickHandler('next')
   // }
  
-  useEffect(()=>{
-    cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
-  },[divCardsContainer.current,slideCardMargin,settings])
+  // useEffect(()=>{
+  //   sliderVisibleWidth.current = autoGapSliderMainContainer.current.offsetWidth
+  // },[autoGapSliderMainContainer.current,slideCardMargin,settings])
+  // useEffect(()=>{
+  //   cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
+  // },[divCardsContainer.current,slideCardMargin,settings])
   const clickHandler = (direction) => {
     // If next button is clicked
     const divCardsContainerTotalWidth = cardsContainerTotalWidth.current
@@ -117,19 +120,19 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
         // Return to first slide and reset positions of scroll reference
         resetSliderPosition()
         endOfSlide.current = false
-        // ex: say divCardsContainerTotalWidth = 2360; and sliderVisibleWidth = 1336 and nextPxValueToScrl.current = -1440 then
-        // sliderVisibleWidth is slider width which is visible to user
+        // ex: say divCardsContainerTotalWidth = 2360; and sliderVisibleWidth.current = 1336 and nextPxValueToScrl.current = -1440 then
+        // sliderVisibleWidth.current is slider width which is visible to user
         // divCardsContainerTotalWidth is total width of container holding cards =  visible area+hidden area
       } else if (
         divCardsContainerTotalWidth -
-          sliderVisibleWidth -
+          sliderVisibleWidth.current -
           slideCardMargin -
           10 <=
         -nextPxValueToScrl.current
       ) {
         // If slide is about to reach last slide , last but one click of endOfSlide.current
-        // divCardsContainer.current.style.cssText = `transform: translateX(${-divCardsContainerTotalWidth+sliderVisibleWidth}px)`
-        updateTranslateValue(-divCardsContainerTotalWidth + sliderVisibleWidth)
+        // divCardsContainer.current.style.cssText = `transform: translateX(${-divCardsContainerTotalWidth+sliderVisibleWidth.current}px)`
+        updateTranslateValue(-divCardsContainerTotalWidth + sliderVisibleWidth.current)
         // Update slider position reference, pass 'next' to update refrence with respect to next button click
         updateSliderPositionRef('next')
         endOfSlide.current = true
@@ -147,7 +150,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       endOfSlide.current = false
       if (
         prevPxValueToScrl.current > 0 ||
-        prevPxValueToScrl.current + slidesToScrollWidth > 0
+        prevPxValueToScrl.current + slidesToScrollWidth.current > 0
       ) {
         displayArrow('prev', false)
         // If slider is over left return to first slide and reset positions of scroll reference
@@ -168,7 +171,8 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     // Slider width is an outer div which shows entire slider if we set slider to be 200px wide-
     // -width is set on this div , we need it to calculate slider visible width in which slider is visible
     // by default slider takes full viewport width.ex : 1600px
-    sliderVisibleWidth = autoGapSliderMainContainer.current.offsetWidth
+    sliderVisibleWidth.current = autoGapSliderMainContainer.current.offsetWidth
+    cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
     // If slider has margin (space between slider cards if sliders are touch to each other then it has no margin)-
     // -it is required to calculate how much does slider scrolls
     let eachSlide = childSliderCardRef.current
@@ -183,13 +187,13 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     // Number of slides to scroll
     // slidesToScroll = 1;
     // Number of slides to scroll in pixels ex: if 240px
-    slidesToScrollWidth = slidesToScroll
+    slidesToScrollWidth.current = slidesToScroll
       ? eachSlideWidth * slidesToScroll
-      : sliderVisibleWidth
-    // slidesToScrollWidth = sliderVisibleWidth;
+      : sliderVisibleWidth.current
+    // slidesToScrollWidth.current = sliderVisibleWidth.current;
     // to calculate and track progress of left and right scroll positions
-    prevPxValueToScrl.current = slidesToScrollWidth // ex:240px
-    nextPxValueToScrl.current = -slidesToScrollWidth // ex:-240px
+    prevPxValueToScrl.current = slidesToScrollWidth.current // ex:240px
+    nextPxValueToScrl.current = -slidesToScrollWidth.current // ex:-240px
     // Cards container width generally equal to eachsliderwidth*totalnumberofslides including margin ex: say 2090px
     displayArrow('prev', false)
   }
@@ -201,10 +205,10 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   function calculateMargin() {
     if (!autoAdjustGap) return
     const minGapBetweenSlides = minGapBetweenSlideCards
-    const sliderVisibleWidth = autoGapSliderMainContainer.current.offsetWidth
+    const sliderVisibleWidth1 = sliderVisibleWidth.current
     const eachSlideWidth =
       childSliderCardRef.current.offsetWidth + minGapBetweenSlides
-    const slidesPerVisibleWidth = sliderVisibleWidth / eachSlideWidth
+    const slidesPerVisibleWidth = sliderVisibleWidth1 / eachSlideWidth
     const marginToSetInPercentage =
       slidesPerVisibleWidth - Math.floor(slidesPerVisibleWidth)
     const marginToSetInPx = marginToSetInPercentage * eachSlideWidth
@@ -247,8 +251,8 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
         // timerId =null;
       }
     }
-    calculateMargin()
     initValues()
+    calculateMargin()
     // displayContent(initvalues)
     // clearTimeout(timerId)
     autoSliderMove()
@@ -270,8 +274,8 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       autoGapSliderMainCont.addEventListener('mouseleave', mouseLeaveHandler)
     }
     const resizeHandler = debounce(() => {
-      calculateMargin()
       initValues()
+      calculateMargin()
       resetSliderPosition()
     })
     window.addEventListener('resize', resizeHandler)
@@ -282,11 +286,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       prevBtn.removeEventListener('click', cp)
       autoGapSliderMainCont.removeEventListener('mouseenter', mouseEnterHandler)
       autoGapSliderMainCont.removeEventListener('mouseleave', mouseLeaveHandler)
-      const resizeHandler = debounce(() => {
-        calculateMargin()
-        initValues()
-        resetSliderPosition()
-      })
       window.removeEventListener('resize', resizeHandler)
     }
   }, [slideCardMargin, settings])
@@ -294,13 +293,8 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   const dragHandler = (e) => {
     e.preventDefault()
   }
-  const onImageLoad = (image, isImgReady) => {
-    if (isImgReady) image.classList.remove('loading')
-    else image.classList.add('loading')
-  }
   // useEffect for touch capability
   useEffect(() => {
-    let images = Array.from(document.getElementsByClassName('imageHolder'))
     const autoGapSliderMainCont = autoGapSliderMainContainer.current
     let touchStartPos = 0
     const touchStartHandler = (e) => {
@@ -312,11 +306,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       if (touchEndPos - touchStartPos > 0) clickHandler('prev')
       else clickHandler('next')
     }
-    // images.forEach((image) => {
-    //   onImageLoad(image, false)
-    //   image.addEventListener('dragstart', (e) => dragHandler(e))
-    //   image.addEventListener('load', (e) => onImageLoad(image, true))
-    // })
     autoGapSliderMainCont.addEventListener(
       'touchstart',
       (e) => touchStartHandler(e),
@@ -345,12 +334,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
         (e) => touchEndHandler(e),
         { passive: true }
       )
-      images.forEach((image) => {
-        image.removeEventListener('dragstart', (e) => dragHandler(e))
-        // image.removeEventListener('load', (e) => onImageLoad(e))
-      })
-      // autoGapSliderMainContainer.current.removeEventListener('touchmove',(e)=>touchStartHandler(e))
-      // throttle(touchStartHandler,2000,e)
     }
   }, [])
   const [prevButtonDisplay, showPrevButton] = useState(true)
