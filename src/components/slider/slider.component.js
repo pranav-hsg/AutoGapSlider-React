@@ -36,24 +36,21 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   const [translateValue, updateTranslateValue] = useState(0)
   // Initialize default values
   let sliderVisibleWidth = 0
-  let eachSlideWidth = 0
   // let slidesToScroll = 0;
   let slidesToScrollWidth = 0
-  let nextPxValueToScrl = 0
-  let prevPxValueToScrl = 0
-  let divCardsContainerTotalWidth = 0
+  const nextPxValueToScrl = useRef(0);
+  const prevPxValueToScrl = useRef(0);
+  const cardsContainerTotalWidth = useRef(0);
   // Detect if we reached end of the slides
-  let endOfSlide = false
+  const endOfSlide = useRef(false);
   // Loadash throttler to throttle resize and if user clicks button many times
   
   const resetSliderPosition = () => {
     // default slidesToScrollWidth:240px
-    nextPxValueToScrl = -slidesToScrollWidth
-    prevPxValueToScrl = slidesToScrollWidth
-    // divCardsContainer.current.style.cssText = `transform: translateX(-${0}px)`;
+    nextPxValueToScrl.current = -slidesToScrollWidth
+    prevPxValueToScrl.current = slidesToScrollWidth
     updateTranslateValue(0)
     displayArrow('prev', false)
-    divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
   }
   const displayArrow = (direction = 'prev', toDisplay = true) => {
     if (direction === 'prev') {
@@ -69,21 +66,21 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     // translateX(-240px) -> moves slide in -> direction by 240px(each slide width by default)
     if (updateref === 'next') {
       // minus position goes -> direction on translate
-      // ex: prevPxValueToScrl=240,nextPxValueToScrl=-240  and slidesToScrollWidth=240
-      prevPxValueToScrl = prevPxValueToScrl - slidesToScrollWidth
-      // first-time:prevPxValueToScrl:0
-      // second-time:prevPxValueToScrl:-240
-      nextPxValueToScrl = nextPxValueToScrl - slidesToScrollWidth
-      // first-time:nextPxValueToScrl:-480
-      // second-time:nextPxValueToScrl:-720
+      // ex: prevPxValueToScrl.current=240,nextPxValueToScrl.current=-240  and slidesToScrollWidth=240
+      prevPxValueToScrl.current = prevPxValueToScrl.current - slidesToScrollWidth
+      // first-time:prevPxValueToScrl.current:0
+      // second-time:prevPxValueToScrl.current:-240
+      nextPxValueToScrl.current = nextPxValueToScrl.current - slidesToScrollWidth
+      // first-time:nextPxValueToScrl.current:-480
+      // second-time:nextPxValueToScrl.current:-720
     } else {
-      // ex: prevPxValueToScrl=-240,nextPxValueToScrl=-720  and slidesToScrollWidth=240
-      nextPxValueToScrl = nextPxValueToScrl + slidesToScrollWidth
-      // first-time:prevPxValueToScrl:480
-      // second-time:prevPxValueToScrl:620
-      prevPxValueToScrl = prevPxValueToScrl + slidesToScrollWidth
-      // first-time:nextPxValueToScrl:0
-      // second-time:nextPxValueToScrl:240
+      // ex: prevPxValueToScrl.current=-240,nextPxValueToScrl.current=-720  and slidesToScrollWidth=240
+      nextPxValueToScrl.current = nextPxValueToScrl.current + slidesToScrollWidth
+      // first-time:prevPxValueToScrl.current:480
+      // second-time:prevPxValueToScrl.current:620
+      prevPxValueToScrl.current = prevPxValueToScrl.current + slidesToScrollWidth
+      // first-time:nextPxValueToScrl.current:0
+      // second-time:nextPxValueToScrl.current:240
     }
   }
   // future upgrade
@@ -101,23 +98,26 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   //     // imgArr.push(...newElement)
   //     imageUpdateArr =  imageUpdateArr.concat(newElement)
   //     imgArrUpdt(imageUpdateArr );
-  //     divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
   //     id = id+2;
   //     // // console.log(imgArrData)
   //     // clickHandler('next')
   // }
+ 
+  useEffect(()=>{
+    cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
+  },[divCardsContainer.current,slideCardMargin,settings])
   const clickHandler = (direction) => {
     // If next button is clicked
-    // divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
+    const divCardsContainerTotalWidth = cardsContainerTotalWidth.current
     if (direction === 'next') {
       displayArrow('prev', true)
 
       // If reached end of slide return to first slide
-      if (endOfSlide) {
+      if (endOfSlide.current) {
         // Return to first slide and reset positions of scroll reference
         resetSliderPosition()
-        endOfSlide = false
-        // ex: say divCardsContainerTotalWidth = 2360; and sliderVisibleWidth = 1336 and nextPxValueToScrl = -1440 then
+        endOfSlide.current = false
+        // ex: say divCardsContainerTotalWidth = 2360; and sliderVisibleWidth = 1336 and nextPxValueToScrl.current = -1440 then
         // sliderVisibleWidth is slider width which is visible to user
         // divCardsContainerTotalWidth is total width of container holding cards =  visible area+hidden area
       } else if (
@@ -125,46 +125,46 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
           sliderVisibleWidth -
           slideCardMargin -
           10 <=
-        -nextPxValueToScrl
+        -nextPxValueToScrl.current
       ) {
-        // If slide is about to reach last slide , last but one click of endofslide
+        // If slide is about to reach last slide , last but one click of endOfSlide.current
         // divCardsContainer.current.style.cssText = `transform: translateX(${-divCardsContainerTotalWidth+sliderVisibleWidth}px)`
         updateTranslateValue(-divCardsContainerTotalWidth + sliderVisibleWidth)
         // Update slider position reference, pass 'next' to update refrence with respect to next button click
         updateSliderPositionRef('next')
-        endOfSlide = true
+        endOfSlide.current = true
         // updateSliderArray()
       } else {
         // If everything is right translate to next px value
-        // divCardsContainer.current.style.cssText = `transform: translateX(${nextPxValueToScrl}px)`
-        updateTranslateValue(nextPxValueToScrl)
+        // divCardsContainer.current.style.cssText = `transform: translateX(${nextPxValueToScrl.current}px)`
+        updateTranslateValue(nextPxValueToScrl.current)
         // Update slider position reference, pass 'next' to update refrence with respect to next button click
         updateSliderPositionRef('next')
-        endOfSlide = false
+        endOfSlide.current = false
       }
     } else if (direction === 'prev') {
       // End of slide cannot be reached by clicking previous button
-      endOfSlide = false
+      endOfSlide.current = false
       if (
-        prevPxValueToScrl > 0 ||
-        prevPxValueToScrl + slidesToScrollWidth > 0
+        prevPxValueToScrl.current > 0 ||
+        prevPxValueToScrl.current + slidesToScrollWidth > 0
       ) {
         displayArrow('prev', false)
         // If slider is over left return to first slide and reset positions of scroll reference
-        // ex: say by default reference prevPxValueToScrl is set to 240px hence this is executed
+        // ex: say by default reference prevPxValueToScrl.current is set to 240px hence this is executed
         resetSliderPosition()
       } else {
         displayArrow('prev', true)
         // If everything is right translate to prev px value
-        // divCardsContainer.current.style.cssText = `transform: translateX(${prevPxValueToScrl}px)`;
-        updateTranslateValue(prevPxValueToScrl)
+        // divCardsContainer.current.style.cssText = `transform: translateX(${prevPxValueToScrl.current}px)`;
+        updateTranslateValue(prevPxValueToScrl.current)
         // Update slider position reference, pass 'prev' to update refrence with respect to next button click
         updateSliderPositionRef('prev')
       }
     }
   }
   const initValues = () => {
-    endOfSlide = false
+    endOfSlide.current = false
     // Slider width is an outer div which shows entire slider if we set slider to be 200px wide-
     // -width is set on this div , we need it to calculate slider visible width in which slider is visible
     // by default slider takes full viewport width.ex : 1600px
@@ -178,7 +178,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     // Convert from string to number and multiply it by two because margin is applied on both sides
     eachslideCardMargin = Number(eachslideCardMargin) * 2
     // Each slider card width is calculated by adding its own width with its own margin
-    eachSlideWidth = eachSlide.offsetWidth + eachslideCardMargin
+    let eachSlideWidth = eachSlide.offsetWidth + eachslideCardMargin
     // eachSlideWidth =Number(eachSlideWidth)
     // Number of slides to scroll
     // slidesToScroll = 1;
@@ -188,10 +188,9 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       : sliderVisibleWidth
     // slidesToScrollWidth = sliderVisibleWidth;
     // to calculate and track progress of left and right scroll positions
-    prevPxValueToScrl = slidesToScrollWidth // ex:240px
-    nextPxValueToScrl = -slidesToScrollWidth // ex:-240px
+    prevPxValueToScrl.current = slidesToScrollWidth // ex:240px
+    nextPxValueToScrl.current = -slidesToScrollWidth // ex:-240px
     // Cards container width generally equal to eachsliderwidth*totalnumberofslides including margin ex: say 2090px
-    divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
     displayArrow('prev', false)
   }
 
@@ -277,10 +276,10 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     })
     window.addEventListener('resize', resizeHandler)
     return () => {
-      // Execute when unmounting (cleanup)
+      // Execute when re-rendering (cleanup)
       clearTimeout(timerId)
-      nextBtn.removeEventListener('click', () => throttle(clickHandler, 'next'))
-      prevBtn.removeEventListener('click', () => throttle(clickHandler, 'prev'))
+      nextBtn.removeEventListener('click', cn)
+      prevBtn.removeEventListener('click', cp)
       autoGapSliderMainCont.removeEventListener('mouseenter', mouseEnterHandler)
       autoGapSliderMainCont.removeEventListener('mouseleave', mouseLeaveHandler)
       const resizeHandler = debounce(() => {
