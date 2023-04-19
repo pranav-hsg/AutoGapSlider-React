@@ -105,6 +105,7 @@ export const imgArrData = [
     {
         'src':'https://picsum.photos/1200/2300',
         id:25,
+        caption:"The dead end"
     },
 ];
 export const settings= {
@@ -127,8 +128,19 @@ export const settings= {
   }
 
 
-
-
+// carousel settings
+//   {
+//     "autoAdjustGap": false,
+//     "minGapBetweenSlides": 0,
+//     "autoMoveSlider": false,
+//     "autoMoveSliderInterval": 1000,
+//     "sliderCardWidth": "100vw",
+//     "slidesToScroll": 4,
+//     "loadImageUrl": "image1",
+//     "defaultImageLoader": true,
+//     "sliderCardHeight": "300px",
+//     "stopUponHover": true
+//   }
 
 
 

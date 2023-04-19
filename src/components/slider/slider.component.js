@@ -203,7 +203,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     updateSlideCardMargin(margin)
   }
   function calculateMargin() {
-    if (!autoAdjustGap) return
+    if (!autoAdjustGap) {setSliderCardStyle(minGapBetweenSlideCards); return}
     const minGapBetweenSlides = minGapBetweenSlideCards
     const sliderVisibleWidth1 = sliderVisibleWidth.current
     const eachSlideWidth =

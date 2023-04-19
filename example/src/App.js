@@ -96,6 +96,7 @@ const App = () => {
       imgArrData={imgArrData} //passing the image data array as a prop
     />
     <DynamicFormElement elementSettings={dynamicForm}  onValueChange={onValueChange}></DynamicFormElement>
+    <pre> {JSON.stringify(settings, null, 2) }</pre>
     </>
   );
 }
