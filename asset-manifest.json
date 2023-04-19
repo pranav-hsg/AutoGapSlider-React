@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/AutoGapSlider-React/static/css/main.f6ed87ba.css",
+    "main.js": "/AutoGapSlider-React/static/js/main.0e57903d.js",
+    "static/media/per1.jpg": "/AutoGapSlider-React/static/media/per1.9a92d8db825c50230471.jpg",
+    "static/media/loading.svg": "/AutoGapSlider-React/static/media/loading.4497a622004f47892fc5.svg",
+    "index.html": "/AutoGapSlider-React/index.html",
+    "static/media/right.svg": "/AutoGapSlider-React/static/media/right.11ac5ea3b29508ccc24b.svg",
+    "static/media/left.svg": "/AutoGapSlider-React/static/media/left.77f97c6fef581992c111.svg",
+    "main.f6ed87ba.css.map": "/AutoGapSlider-React/static/css/main.f6ed87ba.css.map",
+    "main.0e57903d.js.map": "/AutoGapSlider-React/static/js/main.0e57903d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f6ed87ba.css",
+    "static/js/main.0e57903d.js"
+  ]
+}
