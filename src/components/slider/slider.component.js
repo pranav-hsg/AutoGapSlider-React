@@ -253,6 +253,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     }
     initValues()
     calculateMargin()
+    resetSliderPosition()
     // displayContent(initvalues)
     // clearTimeout(timerId)
     autoSliderMove()
