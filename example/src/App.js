@@ -61,7 +61,7 @@ const App = () => {
       "id": null,
       "element": "slidesToScroll",
       "type": "number",
-      "defaultValue": 1
+      "defaultValue": null
     },
   ]
   const [agsSettings2,updateAgs]=useState({
@@ -72,7 +72,7 @@ const App = () => {
     autoAdjustGap:true,
     minGapBetweenSlides:20,
 }
-  const [settings,updateSettings] = useState({"autoAdjustGap":true,"stopUponHover":true,"autoMoveSlider":false,"minGapBetweenSlides":20,"sliderCardHeight":"300px","autoMoveSliderInterval":1000,"sliderCardWidth":"200px","slidesToScroll":null});
+  const [settings,updateSettings] = useState({"autoAdjustGap":true,"stopUponHover":true,"autoMoveSlider":false,"minGapBetweenSlides":20,"sliderCardHeight":"300px","autoMoveSliderInterval":1000,"sliderCardWidth":"200px"});
   const onValueChange = (e) =>{
     const copy = {...e}
     updateSettings(copy)

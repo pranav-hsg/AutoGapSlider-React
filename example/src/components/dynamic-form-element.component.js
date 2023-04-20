@@ -6,6 +6,7 @@ import React,{useState,useEffect} from 'react'
 const DynamicFormElement = ({elementSettings,onValueChange}) =>{
   const [formData, setFormData] = useState({});
   const [copied,setCopied] = useState(false);
+  const [clearCache,setClearCache] = useState(false);
   useEffect(()=>{
     const savedSettings = JSON.parse(localStorage.getItem('savedSettings'));
     const form = elementSettings.reduce((prev,curr)=>
@@ -56,6 +57,13 @@ const DynamicFormElement = ({elementSettings,onValueChange}) =>{
       setCopied(false);
     },1000)
   }
+  function flushCache(){
+    localStorage.removeItem('savedSettings');
+    setClearCache(true);
+    setTimeout(()=>{
+      setClearCache(false);
+    },1000)
+  }
   return <>
   <div className="flex flex-wrap mt-8 mb-8">
 
@@ -69,9 +77,11 @@ const DynamicFormElement = ({elementSettings,onValueChange}) =>{
     </div>
     <div className="w-1/3 mt-5">
       <div className="border  border-gray-800 flex flex-col  p-5 mr-8 overflow-hidden">
+      
         <div className="flex">      
-        {copied && <p className=" text-green-800 "> { 'Copied to clipboard !!! '}</p>}
-        <button className="ml-auto text-blue-500">
+        {(copied|| clearCache) && <p className=" text-green-800 "> { copied ? 'Copied to clipboard !!! ' : 'Cleared cache settings successfully!' }</p>}
+        <button onClick={flushCache} className="ml-auto text-white bg-blue-500 rounded border border-blue-500 p-1">Clear Cache Settings</button>
+        <button className="ml-2 text-blue-500">
           <span onClick={copyCode} className="material-icons">
             {copied ? 'done_all' :'content_copy'  }
             </span></button>
