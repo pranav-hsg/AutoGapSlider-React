@@ -25,10 +25,10 @@ const SliderCard = forwardRef(({ styleImg }, childSliderCardRef) => {
     return () => {
       images.forEach((image) => {
         image.removeEventListener('dragstart', (e) => dragHandler(e))
-        image.removeEventListener('load', (e) => onImageLoad(e))
+        image.removeEventListener('load', (e) =>onImageLoad(image, true))
       })
     }
-  }, [])
+  }, [context])
   
   const onImageLoad = (image, isImgReady) => {
     if (isImgReady) {
