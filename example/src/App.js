@@ -3,7 +3,7 @@ import { AutoGapSlider } from 'autogapslider' //importing AutoGapSlider componen
 import 'autogapslider/dist/index.css' //importing CSS for AutoGapSlider component
 import {imgArrData,settings as agsSettings} from './sliderCardData' //importing image data and settings object from sliderCardData.js file
 import DynamicFormElement from './components/dynamic-form-element.component' 
-
+import image1 from './assets/static/per1.jpg'
 const App = () => {
   function onCardClick($event,obj) { //function to handle the click event on a card
     console.log('Button clicked',$event,obj); //log the click event and card object to the console
@@ -17,15 +17,33 @@ const App = () => {
     },
     {
       "id": null,
-      "element": "minGapBetweenSlides",
-      "type": "number",
-      "defaultValue": 20
+      "element": "defaultImageLoader",
+      "type": "boolean",
+      "defaultValue": true
+    },
+    {
+      "id": null,
+      "element": "stopUponHover",
+      "type": "boolean",
+      "defaultValue": true
     },
     {
       "id": null,
       "element": "autoMoveSlider",
       "type": "boolean",
       "defaultValue": false
+    },
+    {
+      "id": null,
+      "element": "minGapBetweenSlides",
+      "type": "number",
+      "defaultValue": 20
+    },
+    {
+      "id": null,
+      "element": "sliderCardHeight",
+      "type": "string",
+      "defaultValue": "300px"
     },
     {
       "id": null,
@@ -45,30 +63,6 @@ const App = () => {
       "type": "number",
       "defaultValue": 1
     },
-    {
-      "id": null,
-      "element": "loadImageUrl",
-      "type": "string",
-      "defaultValue": "image1"
-    },
-    {
-      "id": null,
-      "element": "defaultImageLoader",
-      "type": "boolean",
-      "defaultValue": true
-    },
-    {
-      "id": null,
-      "element": "sliderCardHeight",
-      "type": "string",
-      "defaultValue": "300px"
-    },
-    {
-      "id": null,
-      "element": "stopUponHover",
-      "type": "boolean",
-      "defaultValue": true
-    }
   ]
   const [agsSettings2,updateAgs]=useState({
       autoAdjustGap:true,
@@ -78,11 +72,9 @@ const App = () => {
     autoAdjustGap:true,
     minGapBetweenSlides:20,
 }
-  const [settings,updateSettings] = useState(agsSettings);
+  const [settings,updateSettings] = useState({"autoAdjustGap":true,"stopUponHover":true,"autoMoveSlider":false,"minGapBetweenSlides":20,"sliderCardHeight":"300px","autoMoveSliderInterval":1000,"sliderCardWidth":"200px","slidesToScroll":null});
   const onValueChange = (e) =>{
     const copy = {...e}
-    console.log(settings,copy)
-    console.log(copy)
     updateSettings(copy)
   }
   return (
@@ -96,7 +88,6 @@ const App = () => {
       imgArrData={imgArrData} //passing the image data array as a prop
     />
     <DynamicFormElement elementSettings={dynamicForm}  onValueChange={onValueChange}></DynamicFormElement>
-    <pre> {JSON.stringify(settings, null, 2) }</pre>
     </>
   );
 }

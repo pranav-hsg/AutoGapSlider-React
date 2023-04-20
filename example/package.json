@@ -11,12 +11,16 @@
   },
   "dependencies": {
     "autogapslider": "file:..",
+    "postcss-flexbugs-fixes": "file:../postcss-flexbugs-fixes",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "react-scripts": "file:../node_modules/react-scripts",
-    "postcss-flexbugs-fixes":"file:../postcss-flexbugs-fixes"
+    "react-scripts": "file:../node_modules/react-scripts"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.1"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },

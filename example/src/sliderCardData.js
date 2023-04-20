@@ -111,6 +111,7 @@ export const imgArrData = [
 export const settings= {
     autoAdjustGap:true,
     minGapBetweenSlides:20,
+    defaultImageLoader:true
 //     autoMoveSlider:true,
 //     autoMoveSliderInterval:1000,
 //     sliderCardWidth:'200px',

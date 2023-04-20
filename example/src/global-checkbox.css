@@ -1,0 +1,62 @@
+:global {
+  .input-checkbox {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+  }
+  .input-checkbox + label {
+    position: relative;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+  }
+  .input-checkbox + label::before {
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 14px;
+    width: 24px;
+    height: 24px;
+    background-color: rgb(241, 245, 249);
+    border-width: 0px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    border-radius: 0.25rem;
+    box-shadow: rgba(42, 42, 42, 0.75) 0px 0px 0px 0px;
+  }
+  .input-checkbox:checked + label::after {
+    content: ' ';
+    background-image: url('assets/icons/done.png');
+    background-repeat: no-repeat;
+    background-size: 17px 17px;
+    background-position: center center;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0px;
+    left: 0px;
+    top: 0px;
+    text-align: center;
+    background-color: transparent;
+    font-size: 10px;
+    height: 24px;
+    width: 24px;
+  }
+  .input-checkbox:disabled + label {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .input-checkbox:focus + label::before {
+    border: 1px solid black;
+  }
+  .input-checkbox:invalid + label::before {
+    border: 1px solid red;
+  }
+}
