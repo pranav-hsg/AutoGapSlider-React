@@ -142,7 +142,7 @@ const settings = {
 ```
 ## Demo
 
-[Click here](https://pranav-medit.github.io/autogapslider-ex/)
+[Click here](https://pranav-medit.github.io/AutoGapSlider-React/)
 
 
 ## License
