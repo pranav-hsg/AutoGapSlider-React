@@ -12,20 +12,16 @@ const DynamicFormElement = ({elementSettings,onValueChange}) =>{
     const form = elementSettings.reduce((prev,curr)=>
        ({...prev, [curr.element]:((curr.defaultValue) ?? (curr.type=='boolean' ? false : ''))})
     ,{})
-    console.log(form);
     if(savedSettings ) {onValueChange?.(savedSettings)}
     else {onValueChange?.(form)}
     setFormData(savedSettings ?? form);
   },[])
   function handleChange(event,elem){
     // const {name,value} = e.target;
-    // console.log(event);
     const {type} = elem;
     let { name, value, checked } = event.target;
     if(type === 'boolean') value =  checked;
     if(type === 'number') value = parseInt(value);
-    // console.log(e)
-    // console.log(name,value)
     setFormData(prevState => {
       const tempData = {
         ...prevState,
