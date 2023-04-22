@@ -1,7 +1,7 @@
 
 
 import React,{useState,useEffect} from 'react'
-
+import styles from './dynamic-form-element.component.css'
 
 const DynamicFormElement = ({elementSettings,onValueChange}) =>{
   const [formData, setFormData] = useState({});
@@ -61,18 +61,18 @@ const DynamicFormElement = ({elementSettings,onValueChange}) =>{
     },1000)
   }
   return <>
-  <div className="flex flex-wrap mt-8 mb-8">
+  <div className={"flex flex-wrap m-4 mt-8 mb-8 "+styles.containerDiv } >
 
-    <div className="mt-2 flex flex-wrap w-2/3">
+    <div className="mt-2 flex flex-wrap w-2/3 max-md:w-full">
     {elementSettings.map((e,i) =>{
-        return <div className="mt-2 flex w-[400px]" key={e.id+i}>
-            <label className="label w-[200px] flex  justify-end items-center mr-2"  htmlFor={e.id}>{splitUponUpperCase(e.element)} :</label>
+        return <div className="mt-2 flex w-[410px] flex-wrap max-sm:justify-center" key={e.id+i}>
+            <label className="label w-[200px] flex  sm:justify-end items-center  mr-2"  htmlFor={e.id}>{splitUponUpperCase(e.element)} :</label>
             <div className="w-[200px] items-center flex" >{elementMap(formData,e)[e.type]}</div>
           </div>
     })}
     </div>
-    <div className="w-1/3 mt-5">
-      <div className="border  border-gray-800 flex flex-col  p-5 mr-8 overflow-hidden">
+    <div className="w-1/3 mt-5  max-md:w-full">
+      <div className="border  border-gray-800 flex flex-col  p-5 mr-8 ">
       
         <div className="flex">      
         {(copied|| clearCache) && <p className=" text-green-800 "> { copied ? 'Copied to clipboard !!! ' : 'Cleared cache settings successfully!' }</p>}
@@ -82,7 +82,7 @@ const DynamicFormElement = ({elementSettings,onValueChange}) =>{
             {copied ? 'done_all' :'content_copy'  }
             </span></button>
         </div>
-        <pre className=""> {JSON.stringify(formData, null, 2) }</pre>
+        <pre className="overflow-auto mt-6"> {JSON.stringify(formData, null, 2) }</pre>
       </div>
     </div>
   </div>

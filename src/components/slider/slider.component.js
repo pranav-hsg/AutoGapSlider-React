@@ -10,14 +10,15 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   const autoMoveSlider = settings?.autoMoveSlider ?? false
   const autoMoveSliderInterval = settings?.autoMoveSliderInterval ?? 2000
   let slidesToScroll = settings?.slidesToScroll 
-  const sliderCardWidth = settings?.sliderCardWidth ?? '200px'
+  const sliderCardWidth = useRef();
   const sliderCardHeight = settings?.sliderCardHeight ?? '300px'
   const stopUponHover = settings?.stopUponHover ?? true
   const translateDuration = settings?.moveDuration ?? 500
 
   // setInterval(() => {
-  //   console.log(settings)
   // },1000)
+  // SliderWidth
+  const windowWidth = useRef(window?.innerWidth);
   // Each slider card
   const childSliderCardRef = useRef()
   // Parent of slider cards , div holding all slide cards
@@ -99,7 +100,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   //     imageUpdateArr =  imageUpdateArr.concat(newElement)
   //     imgArrUpdt(imageUpdateArr );
   //     id = id+2;
-  //     // // console.log(imgArrData)
   //     // clickHandler('next')
   // }
  
@@ -172,6 +172,8 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     // -width is set on this div , we need it to calculate slider visible width in which slider is visible
     // by default slider takes full viewport width.ex : 1600px
     sliderVisibleWidth.current = autoGapSliderMainContainer.current.offsetWidth
+    const userSetCardWidth = settings?.sliderCardWidth ?? '200px';
+    sliderCardWidth.current =  ['100vw','100%'].includes(userSetCardWidth) ? sliderVisibleWidth.current+'px' : userSetCardWidth;
     cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
     // If slider has margin (space between slider cards if sliders are touch to each other then it has no margin)-
     // -it is required to calculate how much does slider scrolls
@@ -274,10 +276,19 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       autoGapSliderMainCont.addEventListener('mouseenter', mouseEnterHandler)
       autoGapSliderMainCont.addEventListener('mouseleave', mouseLeaveHandler)
     }
+    // a function called resizeHandler that will be called after a window resize event has fired after a certain period of time
     const resizeHandler = debounce(() => {
-      initValues()
-      calculateMargin()
-      resetSliderPosition()
+      const newWidth=window?.innerWidth ?? 0;
+      // This check ensures that calculateMargin() is only called when the window width changes, and not when the height changes.
+      // Doing so has two benefits:
+      // 1. It is more optimized, as there is no need to recalculate margins when the height changes.
+      // 2. In some mobile browsers, when the user scrolls in Chrome or some other browsers, the height of the window changes on scroll due to the showing/hiding of the address bar in mobile devices.
+      if(windowWidth.current !== newWidth){
+        windowWidth.current = newWidth;
+        initValues()
+        calculateMargin()
+        resetSliderPosition()
+      }
     })
     window.addEventListener('resize', resizeHandler)
     return () => {
@@ -289,7 +300,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       autoGapSliderMainCont.removeEventListener('mouseleave', mouseLeaveHandler)
       window.removeEventListener('resize', resizeHandler)
     }
-  }, [slideCardMargin, settings])
+  }, [slideCardMargin, settings, divCardsContainer?.current?.offsetWidth])
 
   const dragHandler = (e) => {
     e.preventDefault()
@@ -304,8 +315,8 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     const touchEndHandler = (e) => {
       let touchEndPos = e.changedTouches[0].clientX
       if (touchEndPos === touchStartPos) return
-      if (touchEndPos - touchStartPos > 0) clickHandler('prev')
-      else clickHandler('next')
+      if (touchEndPos - touchStartPos > 40) clickHandler('prev')
+      else if (touchStartPos - touchEndPos > 40) clickHandler('next')
     }
     autoGapSliderMainCont.addEventListener(
       'touchstart',
@@ -320,7 +331,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     autoGapSliderMainCont.addEventListener(
       'touchmove',
       (e) => {
-        // console.log(e)
       },
       { passive: true }
     )
@@ -368,8 +378,8 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
         >
           <SettingsContext.Provider value={{imgArr,onCardClick,styles:{
               slideCardMargin,
-              sliderCardWidth,
-              sliderCardHeight
+              sliderCardWidth:sliderCardWidth.current,
+              sliderCardHeight,
             },ref:childSliderCardRef,settings }} >
 
           <SliderCard />
