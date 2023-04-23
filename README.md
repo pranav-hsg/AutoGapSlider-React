@@ -106,6 +106,7 @@ export const imgArrData = [
 You can provide optional settings to change default behavior of slider.
 Name | Type | Default Value | Description
 ---  | --- | --- | --- 
+carouselMode | boolean | true | A boolean value indicating whether the slider should behave as a carousel or not.
 autoAdjustGap | boolean | true | A boolean value indicating whether the slider should automatically adjust the space between cards to fit the viewport.
 minGapBetweenSlides | number | 0 | The minimum amount of gap between each slider card.
 autoMoveSlider | boolean | false | A boolean value indicating whether the slider should move automatically with a set interval.

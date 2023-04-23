@@ -5,6 +5,11 @@ import SliderCard from '../slider-card/slider-card.component'
 import {throttle,debounce} from '../../utils/throttle-debounce.service'
 export const SettingsContext = React.createContext();
 const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
+  if(settings.carouselMode){
+    settings.autoAdjustGap= false;
+    settings.minGapBetweenSlides = 0;
+    settings.sliderCardWidth = '100%'; 
+  }
   const autoAdjustGap = settings?.autoAdjustGap ?? true
   const minGapBetweenSlideCards = settings?.minGapBetweenSlides ?? 0
   const autoMoveSlider = settings?.autoMoveSlider ?? false
@@ -84,31 +89,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       // second-time:nextPxValueToScrl.current:240
     }
   }
-  // future upgrade
-  // const updateSliderArray = () =>{
-  //     const newElement = [
-  //         {
-  //             'src':'static/per1.jpg',
-  //             id:id,
-  //         },
-  //         {
-  //             'src':'static/per2.jpg',
-  //             id:id+1
-  //         }
-  //     ]
-  //     // imgArr.push(...newElement)
-  //     imageUpdateArr =  imageUpdateArr.concat(newElement)
-  //     imgArrUpdt(imageUpdateArr );
-  //     id = id+2;
-  //     // clickHandler('next')
-  // }
- 
-  // useEffect(()=>{
-  //   sliderVisibleWidth.current = autoGapSliderMainContainer.current.offsetWidth
-  // },[autoGapSliderMainContainer.current,slideCardMargin,settings])
-  // useEffect(()=>{
-  //   cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
-  // },[divCardsContainer.current,slideCardMargin,settings])
   const clickHandler = (direction) => {
     // If next button is clicked
     const divCardsContainerTotalWidth = cardsContainerTotalWidth.current
@@ -173,7 +153,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     // by default slider takes full viewport width.ex : 1600px
     sliderVisibleWidth.current = autoGapSliderMainContainer.current.offsetWidth
     const userSetCardWidth = settings?.sliderCardWidth ?? '200px';
-    sliderCardWidth.current =  ['100vw','100%'].includes(userSetCardWidth) ? sliderVisibleWidth.current+'px' : userSetCardWidth;
+    sliderCardWidth.current =  ['100%'].includes(userSetCardWidth) ? sliderVisibleWidth.current+'px' : userSetCardWidth;
     cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
     // If slider has margin (space between slider cards if sliders are touch to each other then it has no margin)-
     // -it is required to calculate how much does slider scrolls
@@ -219,14 +199,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       minGapBetweenSlides
     setSliderCardStyle(marginPerSlide)
   }
-  // useEffect(() => {
-  //   // setTimeout(
-  //   //   () =>{
-    
-  //   // },
-  //   //     100
-  //   // );
-  // }, [slideCardMargin, settings])
   // Useeffect for slider next and prev button
   useEffect(() => {
     // if (divCardsContainer.current) {
@@ -236,8 +208,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     // Execute when mounting
     // Initialize required values in particular function
     // let timerId;
-    const nextBtn = nextButton.current
-    const prevBtn = prevButton.current
     const autoGapSliderMainCont = autoGapSliderMainContainer.current
     const autoSliderMove = () => {
       if (!autoMoveSlider) return
@@ -261,10 +231,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     autoSliderMove()
     // sliderStyle.transform('400px')
     // Handle click event for both buttons
-    let cn = throttle(clickHandler, 'next');
-    let cp = throttle(clickHandler, 'prev');
-    nextBtn.addEventListener('click', cn)
-    prevBtn.addEventListener('click', cp)
     function mouseEnterHandler() {
       clearAutoSliderMove(timerId)
       timerId = null
@@ -294,8 +260,6 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     return () => {
       // Execute when re-rendering (cleanup)
       clearTimeout(timerId)
-      nextBtn.removeEventListener('click', cn)
-      prevBtn.removeEventListener('click', cp)
       autoGapSliderMainCont.removeEventListener('mouseenter', mouseEnterHandler)
       autoGapSliderMainCont.removeEventListener('mouseleave', mouseLeaveHandler)
       window.removeEventListener('resize', resizeHandler)
@@ -334,9 +298,19 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
       },
       { passive: true }
     )
+    
+    const nextBtn = nextButton.current
+    const prevBtn = prevButton.current
+    let cn = throttle(clickHandler, 'next');
+    let cp = throttle(clickHandler, 'prev');
+    nextBtn.addEventListener('click', cn)
+    prevBtn.addEventListener('click', cp)
     // childSliderCardRef.current.removeEventListener('dragstart',(e)=>dragHandler(e) )
     // autoGapSliderMainContainer.current.addEventListener('touchmove',(e)=>touchStartHandler(e) )
     return () => {
+
+      nextBtn.removeEventListener('click', cn)
+      prevBtn.removeEventListener('click', cp)
       autoGapSliderMainCont.removeEventListener('touchstart', (e) =>
         touchStartHandler(e)
       )
@@ -416,3 +390,22 @@ const sliderStyles = {
 export default AutoGapSlider
 
 // backgroundImage: `url(${'https://picsum.photos/500/100'})`,
+
+  // future upgrade
+  // const updateSliderArray = () =>{
+  //     const newElement = [
+  //         {
+  //             'src':'static/per1.jpg',
+  //             id:id,
+  //         },
+  //         {
+  //             'src':'static/per2.jpg',
+  //             id:id+1
+  //         }
+  //     ]
+  //     // imgArr.push(...newElement)
+  //     imageUpdateArr =  imageUpdateArr.concat(newElement)
+  //     imgArrUpdt(imageUpdateArr );
+  //     id = id+2;
+  //     // clickHandler('next')
+  // }

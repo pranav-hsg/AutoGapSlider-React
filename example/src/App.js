@@ -9,6 +9,13 @@ const App = () => {
     console.log('Button clicked',$event,obj); //log the click event and card object to the console
   }
   const dynamicForm = [
+     
+    {
+      "id": null,
+      "element": "carouselMode",
+      "type": "boolean",
+      "defaultValue": null
+    },
     {
       "id": null,
       "element": "autoAdjustGap",
@@ -84,7 +91,7 @@ const App = () => {
     <AutoGapSlider 
       onCardClick={onCardClick} //passing the onCardClick function as a prop
      
-      settings={agsSettings} //passing the settings object as a prop
+      settings={settings} //passing the settings object as a prop
       imgArrData={imgArrData} //passing the image data array as a prop
     />
     <DynamicFormElement elementSettings={dynamicForm}  onValueChange={onValueChange}></DynamicFormElement>
