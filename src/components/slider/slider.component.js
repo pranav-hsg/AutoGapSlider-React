@@ -376,13 +376,16 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
           ref={divCardsContainer}
           className={styles.divCardsContainer + ' imgComp '}
         >
-          <SettingsContext.Provider value={{imgArr,onCardClick,styles:{
+          
+          <SettingsContext.Provider value={{onCardClick,styles:{
               slideCardMargin,
               sliderCardWidth:sliderCardWidth.current,
               sliderCardHeight,
             },ref:childSliderCardRef,settings }} >
 
-          <SliderCard />
+            {imgArr.map((data, index) => 
+                <SliderCard key={data.id} data={data} index={index} />
+              )}
           </SettingsContext.Provider>
         </div>
         <i

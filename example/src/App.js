@@ -84,7 +84,7 @@ const App = () => {
     <AutoGapSlider 
       onCardClick={onCardClick} //passing the onCardClick function as a prop
      
-      settings={settings} //passing the settings object as a prop
+      settings={agsSettings} //passing the settings object as a prop
       imgArrData={imgArrData} //passing the image data array as a prop
     />
     <DynamicFormElement elementSettings={dynamicForm}  onValueChange={onValueChange}></DynamicFormElement>

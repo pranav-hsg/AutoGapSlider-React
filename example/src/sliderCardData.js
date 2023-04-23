@@ -111,21 +111,21 @@ export const imgArrData = [
 export const settings= {
     autoAdjustGap:true,
     minGapBetweenSlides:20,
-    defaultImageLoader:true
+    defaultImageLoader:true,
 //     autoMoveSlider:true,
 //     autoMoveSliderInterval:1000,
 //     sliderCardWidth:'200px',
 //     slidesToScroll:1,
-//     loadImageUrl:image1,
-//     defaultImageLoader:true,
+    // loadImageUrl:image1,
+    defaultImageLoader:false,
 //     sliderCardHeight:'300px',
 //     stopUponHover:true
-//     styles:{sliderCardCaption:{
+    styles:{sliderCardCaption:{
       
-//         backgroundColor: 'red',
-//         fontSize: '200px'
+        backgroundColor: 'red',
+        fontSize: '200px'
       
-//     }}
+    }}
   }
 
 
