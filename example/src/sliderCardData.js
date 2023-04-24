@@ -116,7 +116,7 @@ export const settings= {
 //     autoMoveSliderInterval:1000,
 //     sliderCardWidth:'200px',
 //     slidesToScroll:1,
-    // loadImageUrl:image1,
+    loadImageUrl:image1,
     defaultImageLoader:false,
 //     sliderCardHeight:'300px',
 //     stopUponHover:true

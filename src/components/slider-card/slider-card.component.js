@@ -10,7 +10,7 @@ import styles from './slider-card.module.scss'
 const SliderCard = ({ data, index }) => {
   // let imageSlide = useRef(null);
   const context = useContext(SettingsContext)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const { loadImageUrl, defaultImageLoader } = context?.settings
   const uStyles = context?.settings?.styles
   return (
@@ -28,17 +28,17 @@ const SliderCard = ({ data, index }) => {
           key={data.id}
           src={data.src}
           onLoad={() => {
-            setIsLoaded(false)
+            setIsLoading(false)
           }}
           className={
-            !isLoaded && defaultImageLoader && !loadImageUrl
+            isLoading && defaultImageLoader && !loadImageUrl
               ? styles.imageLoading
               : ''
           }
           style={
-            !isLoaded
+            isLoading
               ? sliderStyles.imageLoader(loadImageUrl, defaultImageLoader)
-              : sliderStyles.imageLoader(loadImageUrl, defaultImageLoader)
+              : {}
           }
           alt=''
         />
