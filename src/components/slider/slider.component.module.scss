@@ -29,7 +29,7 @@
     padding: 4px;
     cursor: pointer;
     user-select: none;
-    // background-image: url('/assets/icons/left.svg');
+    background-image: url('/src/assets/icons/left.svg');
     background-repeat: no-repeat;
     background-position: center;
     transition: transform .6s;
@@ -60,7 +60,7 @@
   
   i.button~.button {
     box-shadow: -2px 2px 4px black;
-    // background-image: url('assets/icons/right.svg');
+    background-image: url('/src/assets/icons/right.svg');
     right: 10px;
     left: initial;
   }

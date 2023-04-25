@@ -6,7 +6,7 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, "/dist"), // the bundle output path
-    filename: "index.modern.js", // the name of the bundle
+    filename: "index.js", // the name of the bundle
     libraryTarget:"umd",
     library:"AutoGapSlider"
   },
@@ -42,8 +42,7 @@ module.exports = {
       // },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-        include: path.resolve(__dirname, "src"),
-        type: "src/assets/icons",
+        type: 'asset/inline',  
       },
     ],
   },
