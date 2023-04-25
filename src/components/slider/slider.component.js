@@ -4,22 +4,23 @@ import styles from './slider.component.module.scss'
 import SliderCard from '../slider-card/slider-card.component'
 import {throttle,debounce} from '../../utils/throttle-debounce.service'
 export const SettingsContext = React.createContext();
-const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
-  if(settings.carouselMode){
-    settings.autoAdjustGap= false;
-    settings.minGapBetweenSlides = 0;
-    settings.sliderCardWidth = '100%'; 
-  }
-  const autoAdjustGap = settings?.autoAdjustGap ?? true
-  const minGapBetweenSlideCards = settings?.minGapBetweenSlides ?? 0
-  const autoMoveSlider = settings?.autoMoveSlider ?? false
-  const autoMoveSliderInterval = settings?.autoMoveSliderInterval ?? 2000
-  let slidesToScroll = settings?.slidesToScroll 
-  const [sliderCardWidth,setSliderCardWidth] = useState(0);
-  const sliderCardHeight = settings?.sliderCardHeight ?? '300px'
-  const stopUponHover = settings?.stopUponHover ?? true
-  const translateDuration = settings?.moveDuration ?? 500
+const Slider = ({ settings, imgArrData , onCardClick }) => {
 
+  const {
+    autoAdjustGap,
+    // Renames lhs to rhs , can't use 'as' inside destructuring.
+    minGapBetweenSlides:minGapBetweenSlideCards,
+    autoMoveSlider,
+    autoMoveSliderInterval,
+    slidesToScroll,
+    sliderCardHeight,
+    stopUponHover,
+    // Renames lhs to rhs , can't use 'as' inside destructuring.
+    moveDuration:translateDuration,
+  } = settings || {};
+  // const translateDuration = settings?.moveDuration;
+  
+  const [sliderCardWidth,setSliderCardWidth] = useState(0);
   // setInterval(() => {
   // },1000)
   // SliderWidth
@@ -387,7 +388,7 @@ const sliderStyles = {
     display: prevButtonDisplay ? 'inline-block' : 'none'
   })
 }
-export default AutoGapSlider
+export default Slider
 
 // backgroundImage: `url(${'https://picsum.photos/500/100'})`,
 
