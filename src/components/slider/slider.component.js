@@ -15,7 +15,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
   const autoMoveSlider = settings?.autoMoveSlider ?? false
   const autoMoveSliderInterval = settings?.autoMoveSliderInterval ?? 2000
   let slidesToScroll = settings?.slidesToScroll 
-  const sliderCardWidth = useRef();
+  const [sliderCardWidth,setSliderCardWidth] = useState(0);
   const sliderCardHeight = settings?.sliderCardHeight ?? '300px'
   const stopUponHover = settings?.stopUponHover ?? true
   const translateDuration = settings?.moveDuration ?? 500
@@ -153,7 +153,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
     // by default slider takes full viewport width.ex : 1600px
     sliderVisibleWidth.current = autoGapSliderMainContainer.current.offsetWidth
     const userSetCardWidth = settings?.sliderCardWidth ?? '200px';
-    sliderCardWidth.current =  ['100%'].includes(userSetCardWidth) ? sliderVisibleWidth.current+'px' : userSetCardWidth;
+    setSliderCardWidth(['100%'].includes(userSetCardWidth) ? sliderVisibleWidth.current+'px' : userSetCardWidth);
     cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
     // If slider has margin (space between slider cards if sliders are touch to each other then it has no margin)-
     // -it is required to calculate how much does slider scrolls
@@ -353,7 +353,7 @@ const AutoGapSlider = ({ settings, imgArrData , onCardClick }) => {
           
           <SettingsContext.Provider value={{onCardClick,styles:{
               slideCardMargin,
-              sliderCardWidth:sliderCardWidth.current,
+              sliderCardWidth:sliderCardWidth,
               sliderCardHeight,
             },ref:childSliderCardRef,settings }} >
 
