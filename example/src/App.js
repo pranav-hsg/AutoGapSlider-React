@@ -1,9 +1,9 @@
 import React,{useState} from 'react'
-import { AutoGapSlider } from 'autogapslider' //importing AutoGapSlider component from autogapslider library
-// import 'autogapslider/dist/index.css' //importing CSS for AutoGapSlider component
 import {imgArrData,settings as agsSettings} from './sliderCardData' //importing image data and settings object from sliderCardData.js file
 import DynamicFormElement from './components/dynamic-form-element.component' 
 import image1 from './assets/static/per1.jpg'
+import {AutoGapSlider} from 'autogapslider'
+// let {AutoGapSlider} = require("autogapslider");
 const App = () => {
   function onCardClick($event,obj) { //function to handle the click event on a card
     console.log('Button clicked',$event,obj); //log the click event and card object to the console
