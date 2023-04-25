@@ -2,17 +2,24 @@ import React, {
   forwardRef,
   useContext,
   useEffect,
-  useRef,
+  useCallback,
+  useMemo,
   useState
 } from 'react'
 import { SettingsContext } from '../slider/slider.component'
 import styles from './slider-card.module.scss'
+import defaultLoadingImage from '/src/assets/icons/loading.svg'
 const SliderCard = ({ data, index }) => {
   // let imageSlide = useRef(null);
   const context = useContext(SettingsContext)
   const [isLoading, setIsLoading] = useState(true)
   const { loadImageUrl, defaultImageLoader } = context?.settings
-  const uStyles = context?.settings?.styles
+  const uStyles = context?.settings?.styles;
+  const loadingStyles = useMemo(() => {
+    if (loadImageUrl) return sliderStyles.imageLoader(loadImageUrl);
+    else if (defaultImageLoader) return sliderStyles.imageLoader(defaultLoadingImage);
+    return null;
+  }, [loadImageUrl, defaultImageLoader]);
   return (
     <>
       <div
@@ -30,15 +37,9 @@ const SliderCard = ({ data, index }) => {
           onLoad={() => {
             setIsLoading(false)
           }}
-          className={
-            isLoading && defaultImageLoader && !loadImageUrl
-              ? styles.imageLoading
-              : ''
-          }
           style={
             isLoading
-              ? sliderStyles.imageLoader(loadImageUrl, defaultImageLoader)
-              : {}
+              ? loadingStyles : {}
           }
           alt=''
         />
