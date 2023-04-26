@@ -205,62 +205,38 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
     setSliderCardStyle(marginPerSlide)
   }
   useEffect(() => {
-    
-  },[])
-  useEffect(() => {
-    // if (divCardsContainer.current) {
-    //   divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
-    // }
     let timerId
-    // Execute when mounting
-    // Initialize required values in particular function
-    // let timerId;
     const autoGapSliderMainCont = autoGapSliderMainContainer.current
     const autoSliderMove = () => {
-      if (!autoMoveSlider) return
-      if (timerId) return
-      if (autoMoveSlider) {
-        let cn = throttle(clickHandler, 'next');
-        timerId = setInterval(cn, autoMoveSliderInterval)
-      }
+      // if (timerId) return
+      let cn = throttle(clickHandler, 'next');
+      timerId = setInterval(cn,autoMoveSliderInterval)
     }
-    const clearAutoSliderMove = (timerId) => {
-      if (timerId) {
-        clearTimeout(timerId)
-        // timerId =null;
-      }
-    }
-    initValues()
-    calculateMargin()
-    resetSliderPosition()
-    // displayContent(initvalues)
-    // clearTimeout(timerId)
-    autoSliderMove()
-    // sliderStyle.transform('400px')
-    // Handle click event for both buttons
     function mouseEnterHandler() {
-      clearAutoSliderMove(timerId)
+      clearTimeout(timerId)
       timerId = null
     }
-    function mouseLeaveHandler() {
+    if (autoMoveSlider) {
       autoSliderMove()
+      if(stopUponHover){
+        autoGapSliderMainCont.addEventListener('mouseenter', mouseEnterHandler)
+        autoGapSliderMainCont.addEventListener('mouseleave', autoSliderMove)
+      }
     }
-    if (stopUponHover) {
-      autoGapSliderMainCont.addEventListener('mouseenter', mouseEnterHandler)
-      autoGapSliderMainCont.addEventListener('mouseleave', mouseLeaveHandler)
-    }
-    
-    return () => {
+    return ()=>{
       // Execute when re-rendering (cleanup)
       clearTimeout(timerId)
       autoGapSliderMainCont.removeEventListener('mouseenter', mouseEnterHandler)
-      autoGapSliderMainCont.removeEventListener('mouseleave', mouseLeaveHandler)
+      autoGapSliderMainCont.removeEventListener('mouseleave', autoSliderMove)
     }
+  },[settings])
+
+  useEffect(() => {
+    initValues()
+    calculateMargin()
+    resetSliderPosition()
   }, [slideCardMargin, settings, divCardsContainer?.current?.offsetWidth,windowWidth])
 
-  const dragHandler = (e) => {
-    e.preventDefault()
-  }
   // useEffect for touch capability
   useEffect(() => {
     const autoGapSliderMainCont = autoGapSliderMainContainer.current

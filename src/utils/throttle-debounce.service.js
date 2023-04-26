@@ -5,7 +5,7 @@ export const throttle =(func, ...args) =>{
     if (!timeout) {
       timeout = setTimeout(() => {
         timeout = null;
-      }, 600);
+      }, 400);
       func(...args);
     }
   };
