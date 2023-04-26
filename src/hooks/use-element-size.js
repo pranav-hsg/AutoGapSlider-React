@@ -7,36 +7,32 @@ import  {
   useMemo,
   useState
 } from 'react'
-
-function useElementSize({ref,rerenderOnlyOnHeightChange,rerenderOnlyOnWidthChange}){
-  const [dimension,setDimension]  = useState({width:0, height:0});
-  // const [cacheDimension,setCacheDimension] = useState({width:0,height:0});
+import {throttle,debounce} from '../utils/throttle-debounce.service';
+const useElementSize = ({ref,rerenderOnlyOnHeightChange,rerenderOnlyOnWidthChange}={})=>{
+  const [dimension,setDimension]  = useState({width:null, height:null});
   useEffect(()=>{
-    if(ref  == null) ref = window;
-    // setCacheDimension({width:ref.innerWidth,height:ref.innerHeight})
-    const cacheDimension = {width:ref.innerWidth,height:ref.innerHeight}
+    let passedRef = null;
+    let cacheDimension = {width:window.innerWidth,height:window.innerHeight}
     const handleResize = debounce(() => {
-      const newWidth=ref?.innerWidth ?? 0;
-      const newHeight = ref?.innerHeight ?? 0;
+      const resizedWidth=window?.innerWidth ?? 0;
+      const resizedHeight = window?.innerHeight ?? 0;
       function setDimensionWrapper(dimension){
-        setDimension(()=>{
-          cacheDimension = dimension;
-          return dimension;
-        })
+        cacheDimension = {width:window.innerWidth,height:window.innerHeight};
+        setDimension(cacheDimension)
       }
-      if(rerenderOnlyOnHeightChange){
-        if( cacheDimension.width !== newWidth){
-          setDimensionWrapper({width:ref.innerWidth,height:ref.innerHeight});
+      if(rerenderOnlyOnWidthChange){
+        if( cacheDimension.width !== resizedWidth){
+          setDimensionWrapper();
         }
-      }else if(rerenderOnlyOnWidthChange){
-        if( cacheDimension.height !== newHeight){
-          setDimensionWrapper({width:ref.innerWidth,height:ref.innerHeight});
+      }else if(rerenderOnlyOnHeightChange){
+        if( cacheDimension.height !== resizedHeight){
+          setDimensionWrapper();
         }
       }else{
-        setDimensionWrapper({width:ref.innerWidth,height:ref.innerHeight});
+        setDimensionWrapper();
       }
     })
-    ref.addEventListener("resize",(e)=>handleResize(e))
+    window.addEventListener("resize",(e)=>handleResize(e))
     return ()=>{
 
     }

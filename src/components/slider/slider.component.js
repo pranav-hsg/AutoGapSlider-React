@@ -2,11 +2,15 @@ import { useRef, useEffect, useState } from 'react'
 import * as React from 'react'
 import styles from './slider.component.module.scss'
 import SliderCard from '../slider-card/slider-card.component'
-import {throttle,debounce} from '../../utils/throttle-debounce.service'
-import {useElementSize} from '../../hooks/use-element-size'
+import {throttle,debounce} from '../../utils/throttle-debounce.service';
+import useElementSize from '../../hooks/use-element-size';
 export const SettingsContext = React.createContext();
 const Slider = ({ settings, imgArrData , onCardClick }) => {
-  const {width,height}=useElementSize();
+  
+  // Parent of slider cards , div holding all slide cards
+  const divCardsContainer = useRef()
+  // Rerenders on window width resize. 
+  const { width:windowWidth }= useElementSize({rerenderOnlyOnWidthChange: true });
   const {
     autoAdjustGap,
     // Renames lhs to rhs , can't use 'as' inside destructuring.
@@ -25,11 +29,8 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   // setInterval(() => {
   // },1000)
   // SliderWidth
-  const windowWidth = useRef(window?.innerWidth);
   // Each slider card
   const childSliderCardRef = useRef()
-  // Parent of slider cards , div holding all slide cards
-  const divCardsContainer = useRef()
   // Slider containing cards container and prev, next buttons.
   const autoGapSliderMainContainer = useRef()
   // Grabbing next button
@@ -203,7 +204,9 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
       minGapBetweenSlides
     setSliderCardStyle(marginPerSlide)
   }
-  // Useeffect for slider next and prev button
+  useEffect(() => {
+    
+  },[])
   useEffect(() => {
     // if (divCardsContainer.current) {
     //   divCardsContainerTotalWidth = divCardsContainer.current.offsetWidth
@@ -246,29 +249,14 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
       autoGapSliderMainCont.addEventListener('mouseenter', mouseEnterHandler)
       autoGapSliderMainCont.addEventListener('mouseleave', mouseLeaveHandler)
     }
-    // a function called resizeHandler that will be called after a window resize event has fired after a certain period of time
-    const resizeHandler = debounce(() => {
-      const newWidth=window?.innerWidth ?? 0;
-      // This check ensures that calculateMargin() is only called when the window width changes, and not when the height changes.
-      // Doing so has two benefits:
-      // 1. It is more optimized, as there is no need to recalculate margins when the height changes.
-      // 2. In some mobile browsers, when the user scrolls in Chrome or some other browsers, the height of the window changes on scroll due to the showing/hiding of the address bar in mobile devices.
-      if(windowWidth.current !== newWidth){
-        windowWidth.current = newWidth;
-        initValues()
-        calculateMargin()
-        resetSliderPosition()
-      }
-    })
-    window.addEventListener('resize', resizeHandler)
+    
     return () => {
       // Execute when re-rendering (cleanup)
       clearTimeout(timerId)
       autoGapSliderMainCont.removeEventListener('mouseenter', mouseEnterHandler)
       autoGapSliderMainCont.removeEventListener('mouseleave', mouseLeaveHandler)
-      window.removeEventListener('resize', resizeHandler)
     }
-  }, [slideCardMargin, settings, divCardsContainer?.current?.offsetWidth])
+  }, [slideCardMargin, settings, divCardsContainer?.current?.offsetWidth,windowWidth])
 
   const dragHandler = (e) => {
     e.preventDefault()
@@ -384,3 +372,17 @@ export default Slider
   //     id = id+2;
   //     // clickHandler('next')
   // }
+  
+  // Useeffect for slider next and prev button
+
+  // useEffect(()=>{
+  //   // a function called resizeHandler that will be called after a window resize event has fired after a certain period of time
+  //     // This check ensures that calculateMargin() is only called when the window width changes, and not when the height changes.
+  //     // Doing so has two benefits:
+  //     // 1. It is more optimized, as there is no need to recalculate margins when the height changes.
+  //     // 2. In some mobile browsers, when the user scrolls in Chrome or some other browsers, the height of the window changes on scroll due to the showing/hiding of the address bar in mobile devices.
+  //     console.log(windowWidth)
+  //   initValues()
+  //   calculateMargin()
+  //   resetSliderPosition()
+  // },[windowWidth])

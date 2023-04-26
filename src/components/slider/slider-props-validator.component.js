@@ -36,7 +36,7 @@ const SliderPropsValidator  = (Slider) => {
     // let slidesToScroll = settings?.slidesToScroll 
     // const [sliderCardWidth,setSliderCardWidth] = useState(0);
     // const translateDuration = settings?.moveDuration ?? 500
-    console.log(propsCopy);
+    // console.log(propsCopy);
     return <Slider {...propsCopy}  />;
   };
 
