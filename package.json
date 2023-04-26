@@ -25,10 +25,8 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "webpack --mode development",
-    "start": "webpack --mode production",
-    "serve2": "webpack --mode development",
-    "build2": "webpack --mode production",
+    "start": "webpack --mode development",
+    "build": "webpack --mode production",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",

@@ -3,9 +3,10 @@ import * as React from 'react'
 import styles from './slider.component.module.scss'
 import SliderCard from '../slider-card/slider-card.component'
 import {throttle,debounce} from '../../utils/throttle-debounce.service'
+import {useElementSize} from '../../hooks/use-element-size'
 export const SettingsContext = React.createContext();
 const Slider = ({ settings, imgArrData , onCardClick }) => {
-
+  const {width,height}=useElementSize();
   const {
     autoAdjustGap,
     // Renames lhs to rhs , can't use 'as' inside destructuring.
@@ -48,6 +49,8 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   const nextPxValueToScrl = useRef(0);
   const prevPxValueToScrl = useRef(0);
   const cardsContainerTotalWidth = useRef(0);
+  const [prevButtonDisplay, showPrevButton] = useState(true)
+  const [nextButtonDisplay, showNextButton] = useState(true)
   // Detect if we reached end of the slides
   const endOfSlide = useRef(false);
   // Loadash throttler to throttle resize and if user clicks button many times
@@ -273,61 +276,32 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   // useEffect for touch capability
   useEffect(() => {
     const autoGapSliderMainCont = autoGapSliderMainContainer.current
-    let touchStartPos = 0
-    const touchStartHandler = (e) => {
-      touchStartPos = e.changedTouches[0].clientX
-    }
-    const touchEndHandler = (e) => {
-      let touchEndPos = e.changedTouches[0].clientX
-      if (touchEndPos === touchStartPos) return
-      if (touchEndPos - touchStartPos > 40) clickHandler('prev')
-      else if (touchStartPos - touchEndPos > 40) clickHandler('next')
-    }
-    autoGapSliderMainCont.addEventListener(
-      'touchstart',
-      (e) => touchStartHandler(e),
-      { passive: true }
-    )
-    autoGapSliderMainCont.addEventListener(
-      'touchend',
-      (e) => touchEndHandler(e),
-      { passive: true }
-    )
-    autoGapSliderMainCont.addEventListener(
-      'touchmove',
-      (e) => {
-      },
-      { passive: true }
-    )
-    
     const nextBtn = nextButton.current
     const prevBtn = prevButton.current
-    let cn = throttle(clickHandler, 'next');
-    let cp = throttle(clickHandler, 'prev');
-    nextBtn.addEventListener('click', cn)
-    prevBtn.addEventListener('click', cp)
+    let touchStartPos = 0
+    const handleTouchStart = (e) => {
+      touchStartPos = e.changedTouches[0].clientX;
+    };
+    const handleTouchEnd = (e) => {
+      const touchEndPos = e.changedTouches[0].clientX;
+      if (touchEndPos === touchStartPos) return;
+      touchEndPos - touchStartPos > 40 ? clickHandler('prev') : clickHandler('next');
+    };
+    const handleNextClick = throttle(() => clickHandler('next'));
+    const handlePrevClick = throttle(() => clickHandler('prev'));
+    autoGapSliderMainCont.addEventListener('touchstart', handleTouchStart, { passive: true });
+    autoGapSliderMainCont.addEventListener('touchend', handleTouchEnd, { passive: true });
+    nextBtn.addEventListener('click', handleNextClick);
+    prevBtn.addEventListener('click', handlePrevClick);
     // childSliderCardRef.current.removeEventListener('dragstart',(e)=>dragHandler(e) )
     // autoGapSliderMainContainer.current.addEventListener('touchmove',(e)=>touchStartHandler(e) )
     return () => {
-
-      nextBtn.removeEventListener('click', cn)
-      prevBtn.removeEventListener('click', cp)
-      autoGapSliderMainCont.removeEventListener('touchstart', (e) =>
-        touchStartHandler(e)
-      )
-      autoGapSliderMainCont.removeEventListener(
-        'touchend',
-        (e) => touchEndHandler(e),
-        { passive: true }
-      )
+      autoGapSliderMainCont.removeEventListener('touchstart', handleTouchStart, { passive: true });
+      autoGapSliderMainCont.removeEventListener('touchend', handleTouchEnd, { passive: true });
+      nextBtn.removeEventListener('click', handleNextClick);
+      prevBtn.removeEventListener('click', handlePrevClick);
     }
   }, [])
-  const [prevButtonDisplay, showPrevButton] = useState(true)
-  const [nextButtonDisplay, showNextButton] = useState(true)
-  
-  // const leftStyle = {display:prevButtonDisplay?"inline-block":"none"}
-  // const rightStyle = {display:nextButtonDisplay?"inline-btranslateX(translateValue)lock":"none"}
-  // const sliderStyle = {transform: `translateX(${translateValue+'px'})` || '0'}
   return (
     <>
     
