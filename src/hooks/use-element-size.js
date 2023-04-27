@@ -16,7 +16,7 @@ const useElementSize = ({ref,rerenderOnlyOnHeightChange,rerenderOnlyOnWidthChang
     const handleResize = debounce(() => {
       const resizedWidth=window?.innerWidth ?? 0;
       const resizedHeight = window?.innerHeight ?? 0;
-      function setDimensionWrapper(dimension){
+      function setDimensionWrapper(){
         cacheDimension = {width:window.innerWidth,height:window.innerHeight};
         setDimension(cacheDimension)
       }

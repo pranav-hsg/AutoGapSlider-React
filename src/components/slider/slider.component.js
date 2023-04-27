@@ -6,9 +6,6 @@ import {throttle,debounce} from '../../utils/throttle-debounce.service';
 import useElementSize from '../../hooks/use-element-size';
 export const SettingsContext = React.createContext();
 const Slider = ({ settings, imgArrData , onCardClick }) => {
-  
-  // Parent of slider cards , div holding all slide cards
-  const divCardsContainer = useRef()
   // Rerenders on window width resize. 
   const { width:windowWidth }= useElementSize({rerenderOnlyOnWidthChange: true });
   const {
@@ -26,9 +23,14 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   // const translateDuration = settings?.moveDuration;
   
   const [sliderCardWidth,setSliderCardWidth] = useState(0);
-  // setInterval(() => {
-  // },1000)
-  // SliderWidth
+  const [prevButtonDisplay, showPrevButton] = useState(true)
+  const [nextButtonDisplay, showNextButton] = useState(true)
+  const [imgArr] = useState(imgArrData)
+  const [slideCardMargin, updateSlideCardMargin] = useState(20)
+  const [translateValue, updateTranslateValue] = useState(0)
+
+  // Parent of slider cards , div holding all slide cards
+  const divCardsContainer = useRef()
   // Each slider card
   const childSliderCardRef = useRef()
   // Slider containing cards container and prev, next buttons.
@@ -37,21 +39,13 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   const nextButton = useRef()
   // Grabbing prev button
   const prevButton = useRef()
-  const [imgArr] = useState(imgArrData)
-  // let imageUpdateArr=imgArr;
-  // let id = 12;
-  // let timerId;
-  const [slideCardMargin, updateSlideCardMargin] = useState(20)
-  const [translateValue, updateTranslateValue] = useState(0)
-  // Initialize default values
-  const sliderVisibleWidth = useRef(0);
-  // let slidesToScroll = 0;
+
+  // For calculation purpose, variables.
+  const sliderVisibleWidth = useRef(0);;
   const slidesToScrollWidth = useRef(0);
   const nextPxValueToScrl = useRef(0);
   const prevPxValueToScrl = useRef(0);
   const cardsContainerTotalWidth = useRef(0);
-  const [prevButtonDisplay, showPrevButton] = useState(true)
-  const [nextButtonDisplay, showNextButton] = useState(true)
   // Detect if we reached end of the slides
   const endOfSlide = useRef(false);
   // Loadash throttler to throttle resize and if user clicks button many times
@@ -63,146 +57,99 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
     updateTranslateValue(0)
     displayArrow('prev', false)
   }
-  const displayArrow = (direction = 'prev', toDisplay = true) => {
-    if (direction === 'prev') {
-      if (!toDisplay) showPrevButton(false)
-      else showPrevButton(true)
-    } else {
-      if (!toDisplay) showNextButton(false)
-      else showNextButton(true)
-    }
-  }
-  const updateSliderPositionRef = (updateref) => {
-    // translateX(0) -> initial position, starting position
-    // translateX(-240px) -> moves slide in -> direction by 240px(each slide width by default)
-    if (updateref === 'next') {
-      // minus position goes -> direction on translate
-      // ex: prevPxValueToScrl.current=240,nextPxValueToScrl.current=-240  and slidesToScrollWidth.current=240
+  const updateSliderPositionRef = (updateRef) => {
+    if (updateRef === 'next') {
       prevPxValueToScrl.current = prevPxValueToScrl.current - slidesToScrollWidth.current
-      // first-time:prevPxValueToScrl.current:0
-      // second-time:prevPxValueToScrl.current:-240
       nextPxValueToScrl.current = nextPxValueToScrl.current - slidesToScrollWidth.current
-      // first-time:nextPxValueToScrl.current:-480
-      // second-time:nextPxValueToScrl.current:-720
     } else {
-      // ex: prevPxValueToScrl.current=-240,nextPxValueToScrl.current=-720  and slidesToScrollWidth.current=240
       nextPxValueToScrl.current = nextPxValueToScrl.current + slidesToScrollWidth.current
-      // first-time:prevPxValueToScrl.current:480
-      // second-time:prevPxValueToScrl.current:620
       prevPxValueToScrl.current = prevPxValueToScrl.current + slidesToScrollWidth.current
-      // first-time:nextPxValueToScrl.current:0
-      // second-time:nextPxValueToScrl.current:240
     }
   }
+  const displayArrow = (direction = 'prev', toDisplay = true) => {
+    if (direction === 'prev') showPrevButton(toDisplay)
+    else showNextButton(toDisplay)
+  }
+
+  // ex: say divCardsContainerTotalWidth = 2360; and sliderVisibleWidth.current = 1336 and nextPxValueToScrl.current = -1440 then
   const clickHandler = (direction) => {
-    // If next button is clicked
-    const divCardsContainerTotalWidth = cardsContainerTotalWidth.current
+    const divCardsContainerTotalWidth = cardsContainerTotalWidth.current // visible area+hidden area of slider
     if (direction === 'next') {
       displayArrow('prev', true)
-
-      // If reached end of slide return to first slide
       if (endOfSlide.current) {
-        // Return to first slide and reset positions of scroll reference
         resetSliderPosition()
         endOfSlide.current = false
-        // ex: say divCardsContainerTotalWidth = 2360; and sliderVisibleWidth.current = 1336 and nextPxValueToScrl.current = -1440 then
-        // sliderVisibleWidth.current is slider width which is visible to user
-        // divCardsContainerTotalWidth is total width of container holding cards =  visible area+hidden area
       } else if (
-        divCardsContainerTotalWidth -
-          sliderVisibleWidth.current -
-          slideCardMargin -
-          10 <=
+          divCardsContainerTotalWidth -
+          sliderVisibleWidth.current - 10// (10 for inaccuracies)
+          <=
         -nextPxValueToScrl.current
-      ) {
-        // If slide is about to reach last slide , last but one click of endOfSlide.current
-        // divCardsContainer.current.style.cssText = `transform: translateX(${-divCardsContainerTotalWidth+sliderVisibleWidth.current}px)`
+      ) { // last but one slide condition
         updateTranslateValue(-divCardsContainerTotalWidth + sliderVisibleWidth.current)
-        // Update slider position reference, pass 'next' to update refrence with respect to next button click
         updateSliderPositionRef('next')
         endOfSlide.current = true
-        // updateSliderArray()
       } else {
-        // If everything is right translate to next px value
-        // divCardsContainer.current.style.cssText = `transform: translateX(${nextPxValueToScrl.current}px)`
         updateTranslateValue(nextPxValueToScrl.current)
-        // Update slider position reference, pass 'next' to update refrence with respect to next button click
         updateSliderPositionRef('next')
         endOfSlide.current = false
       }
     } else if (direction === 'prev') {
       // End of slide cannot be reached by clicking previous button
       endOfSlide.current = false
+      // Last but one slide condition upon left moving
       if (
         prevPxValueToScrl.current > 0 ||
         prevPxValueToScrl.current + slidesToScrollWidth.current > 0
       ) {
         displayArrow('prev', false)
-        // If slider is over left return to first slide and reset positions of scroll reference
-        // ex: say by default reference prevPxValueToScrl.current is set to 240px hence this is executed
         resetSliderPosition()
       } else {
         displayArrow('prev', true)
-        // If everything is right translate to prev px value
-        // divCardsContainer.current.style.cssText = `transform: translateX(${prevPxValueToScrl.current}px)`;
         updateTranslateValue(prevPxValueToScrl.current)
-        // Update slider position reference, pass 'prev' to update refrence with respect to next button click
         updateSliderPositionRef('prev')
       }
     }
   }
   const initValues = () => {
     endOfSlide.current = false
-    // Slider width is an outer div which shows entire slider if we set slider to be 200px wide-
-    // -width is set on this div , we need it to calculate slider visible width in which slider is visible
-    // by default slider takes full viewport width.ex : 1600px
     sliderVisibleWidth.current = autoGapSliderMainContainer.current.offsetWidth
     const userSetCardWidth = settings?.sliderCardWidth ?? '200px';
     setSliderCardWidth(['100%'].includes(userSetCardWidth) ? sliderVisibleWidth.current+'px' : userSetCardWidth);
     cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
     // If slider has margin (space between slider cards if sliders are touch to each other then it has no margin)-
     // -it is required to calculate how much does slider scrolls
-    let eachSlide = childSliderCardRef.current
-    let eachslideCardMargin = window
+    const eachSlide = childSliderCardRef.current
+    let eachSlideCardMargin = window
       .getComputedStyle(eachSlide)
       .marginRight.slice(0, -2)
     // Convert from string to number and multiply it by two because margin is applied on both sides
-    eachslideCardMargin = Number(eachslideCardMargin) * 2
+    eachSlideCardMargin = Number(eachSlideCardMargin) * 2
     // Each slider card width is calculated by adding its own width with its own margin
-    let eachSlideWidth = eachSlide.offsetWidth + eachslideCardMargin
-    // eachSlideWidth =Number(eachSlideWidth)
-    // Number of slides to scroll
-    // slidesToScroll = 1;
-    // Number of slides to scroll in pixels ex: if 240px
-    slidesToScrollWidth.current = slidesToScroll
-      ? eachSlideWidth * slidesToScroll
-      : sliderVisibleWidth.current
-    // slidesToScrollWidth.current = sliderVisibleWidth.current;
-    // to calculate and track progress of left and right scroll positions
-    prevPxValueToScrl.current = slidesToScrollWidth.current // ex:240px
-    nextPxValueToScrl.current = -slidesToScrollWidth.current // ex:-240px
-    // Cards container width generally equal to eachsliderwidth*totalnumberofslides including margin ex: say 2090px
-    displayArrow('prev', false)
+    let eachSlideWidth = eachSlide.offsetWidth + eachSlideCardMargin
+    // slidesToScroll = 1; Number of slides to scroll in pixels ex: if 240px
+    slidesToScrollWidth.current = slidesToScroll ? eachSlideWidth * slidesToScroll : sliderVisibleWidth.current
+    resetSliderPosition()
   }
 
-  // useEffect for number of slides to show per div
-  function setSliderCardStyle(margin) {
-    updateSlideCardMargin(margin)
+  function setAutoMargin() {
+    const marginSettings = {
+      totalWidthAvailable:sliderVisibleWidth.current,
+      eachCardWidth:childSliderCardRef.current.offsetWidth,
+      minGap:minGapBetweenSlideCards
+    }
+    const marginPerSlide = autoAdjustGap ? calculateMargin(marginSettings) : marginSettings.minGap;
+    updateSlideCardMargin(marginPerSlide)
   }
-  function calculateMargin() {
-    if (!autoAdjustGap) {setSliderCardStyle(minGapBetweenSlideCards); return}
-    const minGapBetweenSlides = minGapBetweenSlideCards
-    const sliderVisibleWidth1 = sliderVisibleWidth.current
-    const eachSlideWidth =
-      childSliderCardRef.current.offsetWidth + minGapBetweenSlides
-    const slidesPerVisibleWidth = sliderVisibleWidth1 / eachSlideWidth
-    const marginToSetInPercentage =
-      slidesPerVisibleWidth - Math.floor(slidesPerVisibleWidth)
-    const marginToSetInPx = marginToSetInPercentage * eachSlideWidth
-    const marginPerSlide =
-      marginToSetInPx / (Math.ceil(slidesPerVisibleWidth) - 1) +
-      minGapBetweenSlides
-    setSliderCardStyle(marginPerSlide)
+  // eachSlideWidth: Each slider card width in pixel along with the minimum margin to be added in between, ex:eachCardWidth:200px,minGap:20px, totalWidthAvailable:1600px
+  // sliderCardsPerVisibleWidth : Number of cards that can be fit under full slider screen area.ex: Math.trunc(7.27272727273) => 7 whole cards can be fit
+  // marginToSetInPx : Total margin that can be spread between the cards, ex: 1600 - (7*220) => 60
+  // marginPerSlide (return value): Margin to set per each slide, ex: (60/7)+20 => 8.57142857143 +20 => 28.57142857143,
+  // later this can be split and given margin on 2 sides of the card so, 28.57142857143/2 gives 14.2857, so ~14pixel gets applied as left margin and right margin each side of each cards.
+  function calculateMargin({totalWidthAvailable,eachCardWidth,minGap}) {
+    const eachSlideWidth = eachCardWidth + minGap 
+    const sliderCardsPerVisibleWidth =  Math.trunc(totalWidthAvailable / eachSlideWidth)  
+    const marginToSetInPx = totalWidthAvailable -  (sliderCardsPerVisibleWidth * eachSlideWidth) 
+    return (marginToSetInPx / sliderCardsPerVisibleWidth) + minGap;
   }
   useEffect(() => {
     let timerId
@@ -233,8 +180,7 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
 
   useEffect(() => {
     initValues()
-    calculateMargin()
-    resetSliderPosition()
+    setAutoMargin()
   }, [slideCardMargin, settings, divCardsContainer?.current?.offsetWidth,windowWidth])
 
   // useEffect for touch capability
@@ -268,7 +214,6 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   }, [])
   return (
     <>
-    
       <div
         id='visibleDiv'
         ref={autoGapSliderMainContainer}
@@ -327,38 +272,3 @@ const sliderStyles = {
   })
 }
 export default Slider
-
-// backgroundImage: `url(${'https://picsum.photos/500/100'})`,
-
-  // future upgrade
-  // const updateSliderArray = () =>{
-  //     const newElement = [
-  //         {
-  //             'src':'static/per1.jpg',
-  //             id:id,
-  //         },
-  //         {
-  //             'src':'static/per2.jpg',
-  //             id:id+1
-  //         }
-  //     ]
-  //     // imgArr.push(...newElement)
-  //     imageUpdateArr =  imageUpdateArr.concat(newElement)
-  //     imgArrUpdt(imageUpdateArr );
-  //     id = id+2;
-  //     // clickHandler('next')
-  // }
-  
-  // Useeffect for slider next and prev button
-
-  // useEffect(()=>{
-  //   // a function called resizeHandler that will be called after a window resize event has fired after a certain period of time
-  //     // This check ensures that calculateMargin() is only called when the window width changes, and not when the height changes.
-  //     // Doing so has two benefits:
-  //     // 1. It is more optimized, as there is no need to recalculate margins when the height changes.
-  //     // 2. In some mobile browsers, when the user scrolls in Chrome or some other browsers, the height of the window changes on scroll due to the showing/hiding of the address bar in mobile devices.
-  //     console.log(windowWidth)
-  //   initValues()
-  //   calculateMargin()
-  //   resetSliderPosition()
-  // },[windowWidth])
