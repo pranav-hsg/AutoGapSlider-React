@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "autogapslider": "file:..",
+    "postcss-flexbugs-fixes": "file:../postcss-flexbugs-fixes",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "react-scripts": "file:../node_modules/react-scripts"

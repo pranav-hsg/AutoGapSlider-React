@@ -26,7 +26,6 @@ npm install --save autogapslider
 ```jsx
 import React from 'react'
 import { AutoGapSlider } from 'autogapslider' //importing AutoGapSlider component from autogapslider library
-import 'autogapslider/dist/index.css' //importing CSS for AutoGapSlider component
 import {imgArrData,settings as agsSettings} from './sliderCardData' //importing image data and settings object from sliderCardData.js file
 
 const App = () => {
