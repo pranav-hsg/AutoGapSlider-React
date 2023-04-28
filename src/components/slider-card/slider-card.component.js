@@ -18,7 +18,6 @@ const SliderCard = ({ data, index }) => {
   const loadingStyles = useMemo(() => {
     if (loadImageUrl) return sliderStyles.imageLoader(loadImageUrl);
     else if (defaultImageLoader) return sliderStyles.imageLoader(defaultLoadingImage);
-    return null;
   }, [loadImageUrl, defaultImageLoader]);
   return (
     <>

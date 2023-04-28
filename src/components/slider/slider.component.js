@@ -4,6 +4,7 @@ import styles from './slider.component.module.scss'
 import SliderCard from '../slider-card/slider-card.component'
 import {throttle,debounce} from '../../utils/throttle-debounce.service';
 import useElementSize from '../../hooks/use-element-size';
+import {calculateMargin} from "../../utils/calculate-margin.service"
 export const SettingsContext = React.createContext();
 const Slider = ({ settings, imgArrData , onCardClick }) => {
   // Rerenders on window width resize. 
@@ -25,7 +26,7 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   const [sliderCardWidth,setSliderCardWidth] = useState(0);
   const [prevButtonDisplay, showPrevButton] = useState(true)
   const [nextButtonDisplay, showNextButton] = useState(true)
-  const [imgArr] = useState(imgArrData)
+  const [imgArr,setImgArr] = useState(imgArrData)
   const [slideCardMargin, updateSlideCardMargin] = useState(20)
   const [translateValue, updateTranslateValue] = useState(0)
 
@@ -57,10 +58,13 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
     updateTranslateValue(0)
     displayArrow('prev', false)
   }
-  const updateSliderPositionRef = (updateRef) => {
-    if (updateRef === 'next') {
-      prevPxValueToScrl.current = prevPxValueToScrl.current - slidesToScrollWidth.current
-      nextPxValueToScrl.current = nextPxValueToScrl.current - slidesToScrollWidth.current
+  const updateSliderPositionRef = (updateRef,value) => {
+    if(value){
+      prevPxValueToScrl.current =   -divCardsContainer.current.offsetWidth +(slidesToScrollWidth.current*2)
+      nextPxValueToScrl.current =  nextPxValueToScrl.current -slidesToScrollWidth.current
+    }else if (updateRef === 'next') {
+      prevPxValueToScrl.current =  prevPxValueToScrl.current - slidesToScrollWidth.current
+      nextPxValueToScrl.current =  nextPxValueToScrl.current -slidesToScrollWidth.current
     } else {
       nextPxValueToScrl.current = nextPxValueToScrl.current + slidesToScrollWidth.current
       prevPxValueToScrl.current = prevPxValueToScrl.current + slidesToScrollWidth.current
@@ -70,10 +74,10 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
     if (direction === 'prev') showPrevButton(toDisplay)
     else showNextButton(toDisplay)
   }
-
+  const infiniteMode = false;
   // ex: say divCardsContainerTotalWidth = 2360; and sliderVisibleWidth.current = 1336 and nextPxValueToScrl.current = -1440 then
-  const clickHandler = (direction) => {
-    const divCardsContainerTotalWidth = cardsContainerTotalWidth.current // visible area+hidden area of slider
+  const moveSlider = (direction) => {
+    const divCardsContainerTotalWidth =divCardsContainer.current.offsetWidth; // visible area+hidden area of slider
     if (direction === 'next') {
       displayArrow('prev', true)
       if (endOfSlide.current) {
@@ -85,9 +89,11 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
           <=
         -nextPxValueToScrl.current
       ) { // last but one slide condition
-        updateTranslateValue(-divCardsContainerTotalWidth + sliderVisibleWidth.current)
-        updateSliderPositionRef('next')
-        endOfSlide.current = true
+       
+        const temp = -divCardsContainerTotalWidth + sliderVisibleWidth.current;
+        updateTranslateValue(temp)
+        if(infiniteMode){ updateSliderArray();updateSliderPositionRef('next',temp)}
+        else {updateSliderPositionRef('next');endOfSlide.current = true}
       } else {
         updateTranslateValue(nextPxValueToScrl.current)
         updateSliderPositionRef('next')
@@ -98,8 +104,7 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
       endOfSlide.current = false
       // Last but one slide condition upon left moving
       if (
-        prevPxValueToScrl.current > 0 ||
-        prevPxValueToScrl.current + slidesToScrollWidth.current > 0
+        prevPxValueToScrl.current >= 0 
       ) {
         displayArrow('prev', false)
         resetSliderPosition()
@@ -140,23 +145,41 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
     const marginPerSlide = autoAdjustGap ? calculateMargin(marginSettings) : marginSettings.minGap;
     updateSlideCardMargin(marginPerSlide)
   }
-  // eachSlideWidth: Each slider card width in pixel along with the minimum margin to be added in between, ex:eachCardWidth:200px,minGap:20px, totalWidthAvailable:1600px
-  // sliderCardsPerVisibleWidth : Number of cards that can be fit under full slider screen area.ex: Math.trunc(7.27272727273) => 7 whole cards can be fit
-  // marginToSetInPx : Total margin that can be spread between the cards, ex: 1600 - (7*220) => 60
-  // marginPerSlide (return value): Margin to set per each slide, ex: (60/7)+20 => 8.57142857143 +20 => 28.57142857143,
-  // later this can be split and given margin on 2 sides of the card so, 28.57142857143/2 gives 14.2857, so ~14pixel gets applied as left margin and right margin each side of each cards.
-  function calculateMargin({totalWidthAvailable,eachCardWidth,minGap}) {
-    const eachSlideWidth = eachCardWidth + minGap 
-    const sliderCardsPerVisibleWidth =  Math.trunc(totalWidthAvailable / eachSlideWidth)  
-    const marginToSetInPx = totalWidthAvailable -  (sliderCardsPerVisibleWidth * eachSlideWidth) 
-    return (marginToSetInPx / sliderCardsPerVisibleWidth) + minGap;
+  let id=useRef(30).current;
+    // future upgrade
+  const updateSliderArray = () =>{
+      const newElement =  () =>   [
+          {
+              'src':'https://picsum.photos/600/600',
+              caption:id+"",
+              id:id,
+          },
+          {
+              'src':'https://picsum.photos/400/600',
+              id:id+1
+          }
+      ]
+      // imgArr.push(...newElement)
+      // let imageUpdateArr =  [...imgArr,...newElement()]
+      console.log(imgArr)
+      setImgArr((prevValue) =>{
+        id = id+2;
+        console.log(newElement())
+        cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
+        return [...prevValue,...newElement()]
+      });
+
+      
+      // clickHandler('next')
   }
+  
+  
   useEffect(() => {
     let timerId
     const autoGapSliderMainCont = autoGapSliderMainContainer.current
     const autoSliderMove = () => {
       // if (timerId) return
-      let cn = throttle(clickHandler, 'next');
+      let cn = throttle(moveSlider, 'next');
       timerId = setInterval(cn,autoMoveSliderInterval)
     }
     function mouseEnterHandler() {
@@ -181,7 +204,7 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   useEffect(() => {
     initValues()
     setAutoMargin()
-  }, [slideCardMargin, settings, divCardsContainer?.current?.offsetWidth,windowWidth])
+  }, [slideCardMargin, settings,windowWidth,sliderCardWidth])
 
   // useEffect for touch capability
   useEffect(() => {
@@ -189,22 +212,18 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
     const nextBtn = nextButton.current
     const prevBtn = prevButton.current
     let touchStartPos = 0
-    const handleTouchStart = (e) => {
-      touchStartPos = e.changedTouches[0].clientX;
-    };
+    const handleTouchStart = (e) => { touchStartPos = e.changedTouches[0].clientX;};
     const handleTouchEnd = (e) => {
       const touchEndPos = e.changedTouches[0].clientX;
       if (touchEndPos === touchStartPos) return;
-      touchEndPos - touchStartPos > 40 ? clickHandler('prev') : clickHandler('next');
+      touchEndPos - touchStartPos > 40 ? moveSlider('prev') : moveSlider('next');
     };
-    const handleNextClick = throttle(() => clickHandler('next'));
-    const handlePrevClick = throttle(() => clickHandler('prev'));
+    const handleNextClick = throttle(() => moveSlider('next'));
+    const handlePrevClick = throttle(() => moveSlider('prev'));
     autoGapSliderMainCont.addEventListener('touchstart', handleTouchStart, { passive: true });
     autoGapSliderMainCont.addEventListener('touchend', handleTouchEnd, { passive: true });
     nextBtn.addEventListener('click', handleNextClick);
     prevBtn.addEventListener('click', handlePrevClick);
-    // childSliderCardRef.current.removeEventListener('dragstart',(e)=>dragHandler(e) )
-    // autoGapSliderMainContainer.current.addEventListener('touchmove',(e)=>touchStartHandler(e) )
     return () => {
       autoGapSliderMainCont.removeEventListener('touchstart', handleTouchStart, { passive: true });
       autoGapSliderMainCont.removeEventListener('touchend', handleTouchEnd, { passive: true });
