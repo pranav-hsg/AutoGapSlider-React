@@ -11,6 +11,8 @@ const SliderPropsValidator  = (Slider) => {
     sliderCardHeight: '300px',
     stopUponHover: true,
     moveDuration: 500,
+    moveByKeyboard: true,
+    infiniteMode:false,
   };
   const filteredProps = (obj)=> {
     // Filters null and undefined props from object ex: {a:'hello',b:null} outputs -> {a:'hello'}, filter outs object like this ex.

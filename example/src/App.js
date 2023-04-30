@@ -42,6 +42,18 @@ const App = () => {
     },
     {
       "id": null,
+      "element": "infiniteMode",
+      "type": "boolean",
+      "defaultValue": false
+    },
+    {
+      "id": null,
+      "element": "moveByKeyboard",
+      "type": "boolean",
+      "defaultValue": true
+    },
+    {
+      "id": null,
       "element": "minGapBetweenSlides",
       "type": "number",
       "defaultValue": 20

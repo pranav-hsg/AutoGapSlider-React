@@ -1,11 +1,11 @@
 // Throttler
-export const throttle =(func, ...args) =>{
+export const throttle =(func) =>{
   let timeout;
-  return function() {
+  return function(...args) {
     if (!timeout) {
       timeout = setTimeout(() => {
         timeout = null;
-      }, 400);
+      },400);
       func(...args);
     }
   };

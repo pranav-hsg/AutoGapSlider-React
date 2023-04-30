@@ -18,11 +18,13 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
     slidesToScroll,
     sliderCardHeight,
     stopUponHover,
+    moveByKeyboard,
+    infiniteMode,
     // Renames lhs to rhs , can't use 'as' inside destructuring.
     moveDuration:translateDuration,
   } = settings || {};
   // const translateDuration = settings?.moveDuration;
-  
+  console.log("INFINITY", infiniteMode)
   const [sliderCardWidth,setSliderCardWidth] = useState(0);
   const [prevButtonDisplay, showPrevButton] = useState(true)
   const [nextButtonDisplay, showNextButton] = useState(true)
@@ -53,28 +55,27 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   
   const resetSliderPosition = () => {
     // default slidesToScrollWidth.current:240px
-    nextPxValueToScrl.current = -slidesToScrollWidth.current
-    prevPxValueToScrl.current = slidesToScrollWidth.current
+    nextPxValueToScrl.current = slidesToScrollWidth.current
+    prevPxValueToScrl.current = -slidesToScrollWidth.current
     updateTranslateValue(0)
     displayArrow('prev', false)
   }
   const updateSliderPositionRef = (updateRef,value) => {
     if(value){
-      prevPxValueToScrl.current =   -divCardsContainer.current.offsetWidth +(slidesToScrollWidth.current*2)
-      nextPxValueToScrl.current =  nextPxValueToScrl.current -slidesToScrollWidth.current
+      prevPxValueToScrl.current =  divCardsContainer.current.offsetWidth -(slidesToScrollWidth.current*2)
+      nextPxValueToScrl.current = divCardsContainer.current.offsetWidth
     }else if (updateRef === 'next') {
-      prevPxValueToScrl.current =  prevPxValueToScrl.current - slidesToScrollWidth.current
-      nextPxValueToScrl.current =  nextPxValueToScrl.current -slidesToScrollWidth.current
+      prevPxValueToScrl.current =  prevPxValueToScrl.current + slidesToScrollWidth.current
+      nextPxValueToScrl.current =  nextPxValueToScrl.current +slidesToScrollWidth.current
     } else {
-      nextPxValueToScrl.current = nextPxValueToScrl.current + slidesToScrollWidth.current
-      prevPxValueToScrl.current = prevPxValueToScrl.current + slidesToScrollWidth.current
+      nextPxValueToScrl.current = nextPxValueToScrl.current - slidesToScrollWidth.current
+      prevPxValueToScrl.current = prevPxValueToScrl.current - slidesToScrollWidth.current
     }
   }
   const displayArrow = (direction = 'prev', toDisplay = true) => {
     if (direction === 'prev') showPrevButton(toDisplay)
     else showNextButton(toDisplay)
   }
-  const infiniteMode = false;
   // ex: say divCardsContainerTotalWidth = 2360; and sliderVisibleWidth.current = 1336 and nextPxValueToScrl.current = -1440 then
   const moveSlider = (direction) => {
     const divCardsContainerTotalWidth =divCardsContainer.current.offsetWidth; // visible area+hidden area of slider
@@ -87,11 +88,12 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
           divCardsContainerTotalWidth -
           sliderVisibleWidth.current - 10// (10 for inaccuracies)
           <=
-        -nextPxValueToScrl.current
-      ) { // last but one slide condition
+        nextPxValueToScrl.current
+      ) { // last slide / (1 button away from slider reset)
        
-        const temp = -divCardsContainerTotalWidth + sliderVisibleWidth.current;
+        const temp = divCardsContainerTotalWidth - sliderVisibleWidth.current;
         updateTranslateValue(temp)
+        console.log(infiniteMode)
         if(infiniteMode){ updateSliderArray();updateSliderPositionRef('next',temp)}
         else {updateSliderPositionRef('next');endOfSlide.current = true}
       } else {
@@ -104,7 +106,7 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
       endOfSlide.current = false
       // Last but one slide condition upon left moving
       if (
-        prevPxValueToScrl.current >= 0 
+        prevPxValueToScrl.current <= 0 
       ) {
         displayArrow('prev', false)
         resetSliderPosition()
@@ -148,7 +150,7 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
   let id=useRef(30).current;
     // future upgrade
   const updateSliderArray = () =>{
-      const newElement =  () =>   [
+      let newElement =   [
           {
               'src':'https://picsum.photos/600/600',
               caption:id+"",
@@ -161,25 +163,47 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
       ]
       // imgArr.push(...newElement)
       // let imageUpdateArr =  [...imgArr,...newElement()]
+      for(let i=0;i<100; i++){
+        newElement.push({
+          'src':'https://picsum.photos/600/600',
+          caption:i+"|"+id+"",
+          id:i+"|"+id+"",
+      })
+      }
       console.log(imgArr)
       setImgArr((prevValue) =>{
         id = id+2;
-        console.log(newElement())
-        cardsContainerTotalWidth.current = divCardsContainer.current.offsetWidth;
-        return [...prevValue,...newElement()]
+        console.log(newElement)
+        return [...prevValue,...newElement]
       });
 
       
       // clickHandler('next')
   }
   
-  
+  useEffect(() => {
+    const container = autoGapSliderMainContainer.current;
+    const onKeyUp = (e) => {
+      if (e.keyCode === 37) {
+        moveSlider('prev')
+      } else if (e.keyCode === 39) {
+        // handle right arrow key
+        moveSlider('next')
+      }
+    };
+    const keyUpThrottled = throttle(onKeyUp)
+    if(moveByKeyboard) container.addEventListener("keyup", keyUpThrottled);
+    return () => {
+      container.removeEventListener("keyup", keyUpThrottled);
+    };
+  }, [autoGapSliderMainContainer,moveByKeyboard,infiniteMode]);
   useEffect(() => {
     let timerId
     const autoGapSliderMainCont = autoGapSliderMainContainer.current
     const autoSliderMove = () => {
       // if (timerId) return
-      let cn = throttle(moveSlider, 'next');
+      let cn = throttle(() =>moveSlider('next'));
+      console.log("he")
       timerId = setInterval(cn,autoMoveSliderInterval)
     }
     function mouseEnterHandler() {
@@ -230,11 +254,12 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
       nextBtn.removeEventListener('click', handleNextClick);
       prevBtn.removeEventListener('click', handlePrevClick);
     }
-  }, [])
+  }, [settings])
   return (
     <>
       <div
         id='visibleDiv'
+        tabIndex={0}
         ref={autoGapSliderMainContainer}
         className={
           styles.autoGapSliderMainContainer + ' autoGapMainContainerDiv '
@@ -280,7 +305,7 @@ const Slider = ({ settings, imgArrData , onCardClick }) => {
 // Styles for slider
 const sliderStyles = {
   divCardsContainer: ({ translateValue,translateDuration }) => ({
-    transform: `translateX(${translateValue + 'px'})` || '0',
+    transform: `translateX(${-translateValue + 'px'})` || '0',
     transition: `transform ease-in-out ${translateDuration/1000}s`
   }),
   nextButton: ({ nextButtonDisplay }) => ({
