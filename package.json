@@ -1,7 +1,7 @@
 {
   "name": "autogapslider",
   "homepage": "https://pranav-medit.github.io/AutoGapSlider-React/",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "description": "React slider which gives gap automatically between slides according to viewport.",
   "author": "pranav",
   "license": "MIT",
